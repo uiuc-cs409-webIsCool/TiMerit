@@ -1,4 +1,4 @@
-# Requirement
+# Requirement of the project
 
 1. Need to implement user authentication.
 2. Understand the heat map of components distribution. (Slide 16 page 49)
@@ -6,3 +6,8 @@
 4. How is in experience level, your app will be different or improved from the current solutions. Looking for the motivation of design decision.
 5. Do not have to use real data. We could manually enter data.
 6. App competition is separated from grading.
+
+
+
+# File Structure
+
