@@ -14,3 +14,6 @@ Please read this [post](https://stackoverflow.com/questions/51126472/how-to-orga
 
 
 
+# Reference
+
+1. A very good video to help start the project. [MERN Stack Full Tutorial](https://www.youtube.com/watch?v=CvCiNeLnZ00&t=381s) from Dave.
