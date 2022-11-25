@@ -1,9 +1,11 @@
-const bodyParser = require("body-parser");
-const express = require("express");
-const mongoose = require("mongoose");
-const path = require("path");
-const router = express.Router();
-const secrets = require("./config/secrets.js");
+const 
+    bodyParser = require("body-parser"),
+    express = require("express"),
+    mongoose = require("mongoose"),
+    path = require("path"),
+    router = express.Router(),
+    secrets = require("./config/secrets.js"),
+    cors = require("cors");
 
 
 const app = express();
@@ -14,11 +16,12 @@ mongoose.connect(secrets.mongo_connection, {useNewUrlParser: true});
 // Set up middlewares
 // public folder is used to store static resources for the root page
 app.use("/", express.static(path.join(__dirname, "/public")));
+// Allow application recieve json data
+app.use(express.json());
 // Use the body-parser package in our application
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(bodyParser.json());
 
 require("./routes")(app, router);
 

@@ -1,5 +1,3 @@
-var secrets = require("../config/secrets.js");
-
 module.exports = function(router) {
     var homeRoute = router.route("/");
     homeRoute.get(function(req, res) {
