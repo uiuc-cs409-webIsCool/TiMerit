@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F7F5FF;
+    height: 1000px;
+    margin: 0;
+}
+
+.signupForm {
+    margin-right: 40px;
+    margin-top: 40px;
+    padding: 0;
+    background-color: white;
+    border-radius: 25px;
+    height: 300px;
+    width: 700px;
+    text-align: center;
+}
+
