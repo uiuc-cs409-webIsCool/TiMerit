@@ -1,1 +1,0 @@
-import ExampleCSS from "./Example.module.css"

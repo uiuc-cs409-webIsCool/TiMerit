@@ -1,7 +1,7 @@
 .container {
     background-color: #F7F5FF;
     display: grid;
-    grid-template-rows: 150px 400px 400px;
+    grid-template-rows: 150px 400px 450px;
     margin: 0;
 }
 
@@ -11,17 +11,19 @@
 }
 
 .login_form {
-    margin-left: 450px;
+    margin-left: 650px;
 }
 
-#login_button{
+.login_button{
     margin-left: 50px;
+    background-color:#6503E2;
+    border-width: 0;
 }
 
-#logo {
+.logo {
     width: 150px;
     height: 150px;
-    margin-left: 50px;
+    margin-left: 200px;
 }
 
 
@@ -31,13 +33,14 @@
 }
 
 .text_intro {
-    margin: 60px 0 0 40px;
+    margin: 60px 0 0 200px;
     padding: 0;
 }
 
-#intro_card{
+.intro_card{
     border-width: 0;
     background-color:  #F7F5FF;
+    width: 550px;
 }
 
 .intro-card-title {
@@ -55,6 +58,7 @@
     background-color: white;
     border-radius: 25px;
     height: 250px;
+    width: 700px;
     text-align: center;
 }
 .create_account h1 {
@@ -74,13 +78,15 @@
     font-size: 25px;
 }
 
-#welcome_carousel img {
+
+.slide_images {
+    text-align: center;
+}
+
+.carousel_image {
+    width: 1100px;
     height: 400px;
     border-radius: 25px;
-}
-#welcome_carousel {
-    margin-left: 100px;
-    margin-right: 100px;
 }
 
 
