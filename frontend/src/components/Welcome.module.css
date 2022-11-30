@@ -16,8 +16,12 @@
 
 .login_button{
     margin-left: 50px;
-    background-color:#6503E2;
     border-width: 0;
+    background-color:#6503E2;
+    color: white;
+    border-radius: 25px;
+    width: 75px;
+    height: 37px;
 }
 
 .logo {

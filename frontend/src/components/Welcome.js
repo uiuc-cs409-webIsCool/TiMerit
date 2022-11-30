@@ -17,7 +17,7 @@ function Welcome() {
                     <Row>
                         <Col><Form.Control type="text" placeholder="Email" style={{width:200}}></Form.Control></Col>
                         <Col><Form.Control type="passowrd" placeholder="Password" style={{width:200}}></Form.Control></Col>
-                        <Col><Button variant="success" type="submit" className={styles.login_button}>Log In</Button></Col>
+                        <Col><button type="submit" className={styles.login_button}>Log In</button></Col>
                     </Row>
                 </Form>
             </div>
@@ -38,7 +38,7 @@ function Welcome() {
 
                 <div className={styles.create_account}>
                     <h1>Manage your meaningful time!</h1>
-                    <Button className={styles.create_account_btn}>Create an account</Button>
+                    <button className={styles.create_account_btn}>Create an account</button>
                 </div>
             </div>
 
