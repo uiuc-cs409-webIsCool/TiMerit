@@ -2,10 +2,11 @@ import React from "react";
 
 import styles from "./Welcome.module.css";
 import "bootstrap/dist/css/bootstrap.min.css"
-import {Button, Form, Row, Col, Carousel} from 'react-bootstrap'
+import {Form, Row, Col, Carousel} from 'react-bootstrap'
 
 import logo from "./assets/test.png"
 import carousel_image from "./assets/test1.jpg"
+import { Link } from "react-router-dom";
 
 
 function Welcome() {
@@ -38,7 +39,9 @@ function Welcome() {
 
                 <div className={styles.create_account}>
                     <h1>Manage your meaningful time!</h1>
-                    <button className={styles.create_account_btn}>Create an account</button>
+                    <Link to="/signup">
+                        <button className={styles.create_account_btn} >Create an account</button>
+                    </Link>
                 </div>
             </div>
 
