@@ -1,3 +1,20 @@
+# Schema Definition
+### Collection schema
+1. 'allTasks' - string[] - storing tasks ID string
+
+###  Tag schema
+1. 'name' - string - REQUIRED
+2. ‘allTasks' - string[] - default to []
+
+###  Task schema
+1. 'name' - string - REQUIRED
+2. 'tag' - string 
+3. 'duration' - number of minutes - default to 0
+4. 'description' - string
+5. 'date' - Date of creation - default to today's date
+6. 'assignedCollection' - string - the _id field of its collection - default to ""
+
+
 # File Structure and Environment Setup
 
 Please read this [post](https://stackoverflow.com/questions/51126472/how-to-organise-file-structure-of-backend-and-frontend-in-mern) for an introduction of the file structure of a MERN stack project. One thing to notice is that I have added `node_modules` directory into the .gitignore file so that installed packages won't be pushed to the remote. It seems as long as package json file is pushed, it will automatically synchronize the environment.
