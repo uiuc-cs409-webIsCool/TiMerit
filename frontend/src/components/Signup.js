@@ -21,6 +21,7 @@ function Signup(event) {
                 firstName,
                 lastName,
                 email,
+                password
             })
         })
 
