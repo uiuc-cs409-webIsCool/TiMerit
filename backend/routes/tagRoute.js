@@ -1,5 +1,8 @@
 var express = require('express'),
     router = express.Router(),
+    taskController = require('../controller/taskController'),
+    collectionController = require('../controller/collectionController'),
+    tagController = require('../controller/tagController'),
     mongoose = require('mongoose');
 
 require('../models/collection');

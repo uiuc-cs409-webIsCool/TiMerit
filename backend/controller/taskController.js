@@ -19,6 +19,15 @@ const taskController = {
         console.log(`taskID: ${taskID}. found its collectionID: ${doc.assignedCollection}`);
         return doc.assignedCollection;
     },
+
+    /**
+     * given taskID, return its collID
+     */
+    getTagIDFromTaskID: async(taskID)=>{
+        let doc= await taskModel.findOne({ '_id': taskID });
+        console.log(`taskID: ${taskID}. found its tagId: ${doc.tag}`);
+        return doc.tag;
+    },
 }
 
 module.exports = taskController;

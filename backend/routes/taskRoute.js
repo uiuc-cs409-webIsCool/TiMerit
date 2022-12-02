@@ -1,7 +1,10 @@
+const task = require('../models/task');
+
 var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
     taskController = require('../controller/taskController'),
+    tagController = require('../controller/tagController'),
     collectionController = require('../controller/collectionController'),
     toId = mongoose.Types.ObjectId;
 
@@ -29,15 +32,17 @@ module.exports = (router) => {
             assignedCollection: req.body.assignedCollection
         });
         console.log("! newTask: "+task);
-        task.save().then(doc =>{
+        task.save().then(async doc =>{
             res.status(201).json({
                 message: "Status: Create Success",
                 data: doc
             });
 
             //after task created, add taskID to given collectionID
-            collectionController.addTask(req.body.assignedCollection, doc._id);
+            await collectionController.addTask(req.body.assignedCollection, doc._id);
 
+            //after task created, add taskID to given tagID
+            await tagController.addTask(req.body.tag, doc._id);
         }).catch((err)=>{
             next(err);
         })    
@@ -55,8 +60,13 @@ module.exports = (router) => {
         var nameParam; if(name) nameParam=(name); console.log(nameParam);
         
         const tag = req.body.tag? (req.body.tag): null;
-        var tagParam; if(tag) tagParam=(tag); console.log(tagParam);
-
+        var tagParam; var oldTagId;
+        if(tag) {
+            tagParam=(tag); 
+            console.log(tagParam);
+            
+            oldTagId = await taskController.getTagIDFromTaskID(id);
+        }
         const description = req.body.description? (req.body.description): null;
         var descriptionParam; if(description) descriptionParam=toId(description); console.log(descriptionParam);
 
@@ -74,14 +84,27 @@ module.exports = (router) => {
             }, 
             { new: true }
         ).catch(next);
-        console.log("! after update: "+JSON.parse(doc)); 
+        console.log("! after update: "+(doc)); 
         
         if(doc){
             res.status(201).json({
                 message: "Status: Update Success",
                 data: doc
             });
-        }      
+
+            if(tagParam){
+                //after task created, add taskID to given new tagID
+                await tagController.addTask(req.body.tag, doc._id);
+
+                //goto old tagID, delete taskID from alltask[]
+                await tagController.deleteTask(oldTagId, doc._id);
+            }
+        }  
+        else{
+            let err = new Error('Status: Update Failed');
+            err.code = 404;
+            next(err); 
+        };    
     });
 
     //////////////////////////////GET//////////////////////////////////
@@ -112,6 +135,7 @@ module.exports = (router) => {
         //1 find todelete task CollID + save taskID
         let toDeleteTaskID = req.params.id;
         let collectionId = await taskController.getCollIDFromTaskID(toDeleteTaskID);
+        let tagId = await taskController.getTagIDFromTaskID(toDeleteTaskID);
 
         //2 delete a task
         taskModel.findByIdAndDelete(toDeleteTaskID)
@@ -124,8 +148,11 @@ module.exports = (router) => {
                 });
             }).catch(next);   
             
-        //3 goto CollID, delete taskID from task[]
-        collectionController.deleteTask(collectionId, toDeleteTaskID);
+        //3 goto CollID, delete taskID from alltask[]
+        await collectionController.deleteTask(collectionId, toDeleteTaskID);
+
+        //4 goto tagID, delete taskID from alltask[]
+        await tagController.deleteTask(tagId, toDeleteTaskID);
     });
 
 
