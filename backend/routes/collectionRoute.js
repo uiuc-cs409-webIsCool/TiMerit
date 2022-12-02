@@ -30,6 +30,34 @@ module.exports = (router) => {
         }).catch(next)        
     });
 
+    //////////////////////////PUT/////////////////////////
+    collectionRouteID.put(async(req, res, next)=>{
+        console.log('===in putcollection===');
+        console.log("! req.body: "+JSON.stringify(req.body));
+        console.log("! req.params: "+JSON.stringify(req.params.id));
+
+
+        const id=req.params.id;
+        const name = req.body.name? (req.body.name): null;
+        var nameParam; if(name) nameParam=(name); console.log(nameParam);
+ 
+        const doc = await collectionModel.findOneAndUpdate(
+            { _id: id },
+            { name: nameParam }, 
+            { new: true }
+        ).catch(next);
+        console.log("! after update: "+JSON.stringify(doc)); 
+        
+        if(doc){
+            res.status(201).json({
+                message: "Status: Update Success",
+                data: doc
+            });
+        }      
+    });
+
+
+
     //////////////////////////////GET//////////////////////////////////
     collectionRoute.get(async (req, res) => {
         console.log('===in getCollection===');
