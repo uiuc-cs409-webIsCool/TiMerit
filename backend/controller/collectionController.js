@@ -46,7 +46,7 @@ const collectionController = {
     },
 
     isIDExist: async (id) =>{
-        let doc = await tagModel.findOne(
+        let doc = await collectionModel.findOne(
             {"_id": id}
         )
         return doc ? true:false;
