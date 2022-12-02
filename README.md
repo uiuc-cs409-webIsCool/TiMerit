@@ -1,6 +1,7 @@
 # Schema Definition
 ### Collection schema
-1. 'allTasks' - string[] - storing tasks ID string
+1. 'name' - string - REQUIRED
+2. 'allTasks' - string[] - storing tasks ID string
 
 ###  Tag schema
 1. 'name' - string - REQUIRED

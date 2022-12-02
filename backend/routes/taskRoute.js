@@ -43,8 +43,7 @@ module.exports = (router) => {
         const alltask=await taskModel.find();
         console.log("! get all task: "+alltask);
 
-        if(alltask)
-        {
+        if(alltask) {
             res.status(200).json({
                 message: "Status: Get Success",
                 data: alltask
