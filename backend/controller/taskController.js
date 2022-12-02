@@ -17,7 +17,7 @@ const taskController = {
     getCollIDFromTaskID: async(taskID)=>{
         let doc= await taskModel.findOne({ '_id': taskID });
         console.log(`taskID: ${taskID}. found its collectionID: ${doc.assignedCollection}`);
-        // return doc.data[0].assignedUser;
+        return doc.assignedCollection;
     },
 }
 

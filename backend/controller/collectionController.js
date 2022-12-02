@@ -15,9 +15,8 @@ const collectionController = {
      * find collection from collID, remove task of taskID from alltask[]
      */
     deleteTask: async(collID, taskID)=>{
-        console.log(`collID is ${collID}. taskID is ${taskID}`);
+        console.log(`! collID is ${collID}. taskID is ${taskID}`); 
 
-        return;
         let doc = await collectionModel.updateOne(
             {"_id": collID},
             { "$pull": {"allTasks": taskID}},
