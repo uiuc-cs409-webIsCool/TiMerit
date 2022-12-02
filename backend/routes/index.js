@@ -7,4 +7,3 @@ module.exports = function (app, router) {
     // app.use("/api", require("./collectionRoute.js")(router));    
     app.use('/api', require('./userRoute.js'));
 }
-

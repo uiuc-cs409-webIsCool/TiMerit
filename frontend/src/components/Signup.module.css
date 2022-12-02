@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F7F5FF;
+    height: 1000px;
+    margin: 0;
+}
+
+.signupForm {
+    margin-right: 40px;
+    margin-top: 40px;
+    padding: 0;
+    background-color: white;
+    border-radius: 25px;
+    height: 325px;
+    width: 678px;
+    text-align: center;
+}
+
+.title {
+    margin-top: 10px;
+}
+
+.name_input {
+    width: 250px;
+    margin: 12px 50px 12px 50px;
+}
+
+.name_row {
+    display: flex;
+    align-items: center;
+}
+
+.email_input {
+    width: 600px;
+    margin: 12px 50px 12px 50px;
+}
+
+.signup_btn_row {
+    align-items: center;
+}
+
+.signup_btn {
+    margin: 10px;
+    margin-left: auto;
+    margin-right:auto;
+    background-color: #6503E2;
+    color: white;
+    border-width: 0;
+    border-radius: 25px;
+    width: 200px;
+    height: 50px;
+    font-size: 25px;
+}
