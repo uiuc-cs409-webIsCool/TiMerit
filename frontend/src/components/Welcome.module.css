@@ -1,0 +1,97 @@
+.container {
+    background-color: #F7F5FF;
+    display: grid;
+    grid-template-rows: 150px 400px 450px;
+    margin: 0;
+}
+
+.login {
+    display: flex;
+    align-items: center;
+}
+
+.login_form {
+    margin-left: 650px;
+}
+
+.login_button{
+    margin-left: 50px;
+    border-width: 0;
+    background-color:#6503E2;
+    color: white;
+    border-radius: 25px;
+    width: 75px;
+    height: 37px;
+}
+
+.logo {
+    width: 150px;
+    height: 150px;
+    margin-left: 200px;
+}
+
+
+.introduction {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.text_intro {
+    margin: 60px 0 0 200px;
+    padding: 0;
+}
+
+.intro_card{
+    border-width: 0;
+    background-color:  #F7F5FF;
+    width: 550px;
+}
+
+.intro-card-title {
+    margin-bottom: 40px;
+}
+
+.intro-card-text {
+    font-size: 17px;
+}
+
+.create_account {
+    margin-right: 40px;
+    margin-top: 40px;
+    padding: 0;
+    background-color: white;
+    border-radius: 25px;
+    height: 250px;
+    width: 700px;
+    text-align: center;
+}
+.create_account h1 {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.create_account_btn {
+    margin-top: 40px;
+    background-color: #6503E2;
+    color: white;
+    border-width: 0;
+    border-radius: 25px;
+    width: 300px;
+    height: 50px;
+    font-size: 25px;
+}
+
+
+.slide_images {
+    text-align: center;
+}
+
+.carousel_image {
+    width: 1100px;
+    height: 400px;
+    border-radius: 25px;
+}
+
+
+
