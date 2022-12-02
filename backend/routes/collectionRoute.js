@@ -1,5 +1,6 @@
 var express = require('express'),
     router = express.Router(),
+    collectionController = require('../controller/collectionController'),
     mongoose = require('mongoose');
 
 require('../models/collection');

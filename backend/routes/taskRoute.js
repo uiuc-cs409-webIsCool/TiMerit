@@ -1,6 +1,8 @@
 var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
+    taskController = require('../controller/taskController'),
+    collectionController = require('../controller/collectionController'),
     toId = mongoose.Types.ObjectId;
 
 require('../models/collection');
@@ -32,9 +34,13 @@ module.exports = (router) => {
                 message: "Status: Create Success",
                 data: doc
             });
+
+            //after task created, add taskID to given collectionID
+            collectionController.addTask(req.body.assignedCollection, doc._id);
+
         }).catch((err)=>{
             next(err);
-        })        
+        })    
     });
 
     //////////////////////////PUT/////////////////////////
@@ -103,7 +109,11 @@ module.exports = (router) => {
         console.log("! req.body: "+JSON.stringify(req.body));
         console.log("! req.params: "+JSON.stringify(req.params));
         
+        //1 find todelete task CollID + save taskID
         let toDeleteTaskID = req.params.id;
+        let collectionId = await taskController.getCollIDFromTaskID(toDeleteTaskID);
+
+        //2 delete a task
         taskModel.findByIdAndDelete(toDeleteTaskID)
             .then(result =>{
                 console.log("! result: "+result);
@@ -112,7 +122,10 @@ module.exports = (router) => {
                     message: "Status: Delete Success",
                     data: result
                 });
-            }).catch(next);     
+            }).catch(next);   
+            
+        //3 goto CollID, delete taskID from task[]
+        collectionController.deleteTask(collectionId, toDeleteTaskID);
     });
 
 

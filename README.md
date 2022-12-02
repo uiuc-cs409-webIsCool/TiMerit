@@ -13,7 +13,7 @@
 3. 'duration' - number of minutes - default to 0 - unchangeable
 4. 'description' - string
 5. 'date' - Date of creation - default to today's date - unchangeable
-6. 'assignedCollection' - objectID - the _id field of its collection - default to ""
+6. 'assignedCollection' - objectID - the _id field of its collection - default to "" - REQUIRED
 
 
 # File Structure and Environment Setup

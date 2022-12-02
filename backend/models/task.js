@@ -35,7 +35,8 @@ var TaskSchema = new Schema({
     assignedCollection:{
         type: Schema.Types.ObjectId,
         default: "", 
-        ref: "collection"
+        ref: "collection",
+        required: true
     }
 })
 
