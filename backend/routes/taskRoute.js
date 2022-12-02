@@ -1,6 +1,7 @@
 var express = require('express'),
     router = express.Router(),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    toId = mongoose.Types.ObjectId;
 
 require('../models/collection');
 require('../models/tag');
@@ -34,6 +35,47 @@ module.exports = (router) => {
         }).catch((err)=>{
             next(err);
         })        
+    });
+
+    //////////////////////////PUT/////////////////////////
+    taskRouteID.put(async(req, res, next)=>{
+        console.log('===in putTask===');
+        console.log("! req.body: "+JSON.stringify(req.body));
+        console.log("! req.params: "+JSON.stringify(req.params.id));
+
+
+        const id=req.params.id;
+        const name = req.body.name? (req.body.name): null;
+        var nameParam; if(name) nameParam=(name); console.log(nameParam);
+        
+        const tag = req.body.tag? (req.body.tag): null;
+        var tagParam; if(tag) tagParam=(tag); console.log(tagParam);
+
+        const description = req.body.description? (req.body.description): null;
+        var descriptionParam; if(description) descriptionParam=toId(description); console.log(descriptionParam);
+
+        const assignedCollection = req.body.assignedCollection? (req.body.assignedCollection): null;
+        var assignedCollectionParam; if(assignedCollection) assignedCollectionParam=toId(assignedCollection); console.log(assignedCollectionParam);
+
+ 
+        const doc = await taskModel.findOneAndUpdate(
+            { _id: id },
+            { 
+                name: nameParam,
+                tag: tagParam,
+                description: descriptionParam,
+                assignedCollection: assignedCollectionParam
+            }, 
+            { new: true }
+        ).catch(next);
+        console.log("! after update: "+JSON.parse(doc)); 
+        
+        if(doc){
+            res.status(201).json({
+                message: "Status: Update Success",
+                data: doc
+            });
+        }      
     });
 
     //////////////////////////////GET//////////////////////////////////

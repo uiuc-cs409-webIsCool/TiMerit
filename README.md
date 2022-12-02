@@ -1,19 +1,19 @@
 # Schema Definition
 ### Collection schema
 1. 'name' - string - REQUIRED
-2. 'allTasks' - string[] - storing tasks ID string
+2. 'allTasks' - objectID[] - storing tasks ID string
 
 ###  Tag schema
 1. 'name' - string - REQUIRED
-2. ‘allTasks' - string[] - default to []
+2. ‘allTasks' - objectID[] - default to []
 
 ###  Task schema
 1. 'name' - string - REQUIRED
-2. 'tag' - string 
-3. 'duration' - number of minutes - default to 0
+2. 'tag' - objectID - the _id field of its tag - default to "" 
+3. 'duration' - number of minutes - default to 0 - unchangeable
 4. 'description' - string
-5. 'date' - Date of creation - default to today's date
-6. 'assignedCollection' - string - the _id field of its collection - default to ""
+5. 'date' - Date of creation - default to today's date - unchangeable
+6. 'assignedCollection' - objectID - the _id field of its collection - default to ""
 
 
 # File Structure and Environment Setup
