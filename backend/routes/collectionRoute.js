@@ -39,6 +39,13 @@ module.exports = (router) => {
 
 
         const id=req.params.id;
+        if( !(await collectionController.isIDExist(id)) ){
+            let err = new Error('Status: PUT Collection Failed. Given collection ID not found');
+            err.code = 404;
+            next(err); 
+            return;
+        }
+
         const name = req.body.name? (req.body.name): null;
         var nameParam; if(name) nameParam=(name); console.log(nameParam);
  
@@ -84,6 +91,13 @@ module.exports = (router) => {
         console.log("! req.params: "+JSON.stringify(req.params));
         
         let toDeleteCollID = req.params.id;
+        if( !(await collectionController.isIDExist(toDeleteCollID)) ){
+            let err = new Error('Status: DELETE Collection Failed. Given collection ID not found');
+            err.code = 404;
+            next(err); 
+            return;
+        }
+
         collectionModel.findByIdAndDelete(toDeleteCollID)
             .then(result =>{
                 console.log("! result: "+result);

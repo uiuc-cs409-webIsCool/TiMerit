@@ -28,6 +28,13 @@ const taskController = {
         console.log(`taskID: ${taskID}. found its tagId: ${doc.tag}`);
         return doc.tag;
     },
+
+    isTaskIDExist: async (taskId) =>{
+        let doc = await taskModel.findOne(
+            {"_id": taskId}
+        )
+        return doc ? true:false;
+    },
 }
 
 module.exports = taskController;

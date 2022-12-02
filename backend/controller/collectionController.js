@@ -44,6 +44,13 @@ const collectionController = {
         console.log(`! after addTask doc: ${doc}`);
         return doc;
     },
+
+    isIDExist: async (id) =>{
+        let doc = await tagModel.findOne(
+            {"_id": id}
+        )
+        return doc ? true:false;
+    },
 }
 
 module.exports = collectionController;

@@ -46,6 +46,13 @@ module.exports = (router) => {
         console.log("! req.params: "+JSON.stringify(req.params.id));
 
         const id=req.params.id;
+        if( !(await tagController.isIDExist(id)) ){
+            let err = new Error('Status: PUT Tag Failed. Given tag ID not found');
+            err.code = 404;
+            next(err); 
+            return;
+        }
+
         const name = req.body.name? (req.body.name): null;
         var nameParam; if(name) nameParam=(name); console.log(nameParam);
  
@@ -90,6 +97,13 @@ module.exports = (router) => {
         console.log("! req.params: "+JSON.stringify(req.params));
         
         let toDeletetagID = req.params.id;
+        if( !(await tagController.isIDExist(toDeletetagID)) ){
+            let err = new Error('Status: DELETE Tag Failed. Given tag ID not found');
+            err.code = 404;
+            next(err); 
+            return;
+        }
+
         tagModel.findByIdAndDelete(toDeletetagID)
             .then(result =>{
                 console.log("! result: "+result);

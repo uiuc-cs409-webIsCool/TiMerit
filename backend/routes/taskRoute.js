@@ -134,6 +134,12 @@ module.exports = (router) => {
         
         //1 find todelete task CollID + save taskID
         let toDeleteTaskID = req.params.id;
+        if( !(await taskController.isTaskIDExist(toDeleteTaskID)) ){
+            let err = new Error('Status: Delete Task Failed. Given task ID not found');
+            err.code = 404;
+            next(err); 
+            return;
+        }
         let collectionId = await taskController.getCollIDFromTaskID(toDeleteTaskID);
         let tagId = await taskController.getTagIDFromTaskID(toDeleteTaskID);
 
