@@ -4,10 +4,15 @@ const tasks = require('./task');
 
 /**
  * collection schema
+ * 'name' - string - REQUIRED
  * 'allTasks' - string[] - storing tasks ID string
  */
 
 var CollectionSchema = new Schema({
+    name:{
+        type: String,
+        required: true,
+    },
     allTasks:{
         type: [Schema.Types.ObjectId],
         default: [],

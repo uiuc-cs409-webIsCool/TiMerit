@@ -1,6 +1,8 @@
 var express = require('express'),
     router = express.Router(),
+    taskController = require('../controller/taskController'),
     collectionController = require('../controller/collectionController'),
+    tagController = require('../controller/tagController'),
     mongoose = require('mongoose');
 
 require('../models/collection');
@@ -11,36 +13,41 @@ var collectionModel = mongoose.model('collection');
 var tagModel = mongoose.model('tag');
 
 module.exports = (router) => {
-    var collectionRoute = router.route('/collection');
-    var collectionRouteID = router.route('/collection/:id');
+    var tagRoute = router.route('/tag');
+    var tagRouteID = router.route('/tag/:id');
 
     //////////////////////////POST/////////////////////////
-    collectionRoute.post(async(req, res, next)=>{
-        console.log('===in postCollection===');
+    tagRoute.post(async(req, res, next)=>{
+        console.log('===in postTask===');
         console.log("req.body: "+JSON.stringify(req.body));
-        const collection = new collectionModel({
+        const tag = new tagModel({
             name: req.body.name,
-            allTasks: req.body.allTasks
+            description: req.body.description,
+            tag: req.body.tag,
+            duration: req.body.duration,
+            date: req.body.date,
+            assignedCollection: req.body.assignedCollection
         });
-        console.log("! newCollection: "+collection); 
-        collection.save().then(doc =>{
+        console.log("! newtag: "+tag);
+        tag.save().then(doc =>{
             res.status(201).json({
                 message: "Status: Create Success",
                 data: doc
             });
-        }).catch(next)        
+        }).catch((err)=>{
+            next(err);
+        })        
     });
 
     //////////////////////////PUT/////////////////////////
-    collectionRouteID.put(async(req, res, next)=>{
-        console.log('===in putcollection===');
+    tagRouteID.put(async(req, res, next)=>{
+        console.log('===in putTag===');
         console.log("! req.body: "+JSON.stringify(req.body));
         console.log("! req.params: "+JSON.stringify(req.params.id));
 
-
         const id=req.params.id;
-        if( !(await collectionController.isIDExist(id)) ){
-            let err = new Error('Status: PUT Collection Failed. Given collection ID not found');
+        if( !(await tagController.isIDExist(id)) ){
+            let err = new Error('Status: PUT Tag Failed. Given tag ID not found');
             err.code = 404;
             next(err); 
             return;
@@ -49,7 +56,7 @@ module.exports = (router) => {
         const name = req.body.name? (req.body.name): null;
         var nameParam; if(name) nameParam=(name); console.log(nameParam);
  
-        const doc = await collectionModel.findOneAndUpdate(
+        const doc = await tagModel.findOneAndUpdate(
             { _id: id },
             { name: nameParam }, 
             { new: true }
@@ -64,19 +71,17 @@ module.exports = (router) => {
         }      
     });
 
-
-
     //////////////////////////////GET//////////////////////////////////
-    collectionRoute.get(async (req, res) => {
-        console.log('===in getCollection===');
+    tagRoute.get(async (req, res) => {
+        console.log('===in gettag===');
 
-        const allCollection=await collectionModel.find();
-        console.log("! get all collection: "+allCollection);
+        const alltag=await tagModel.find();
+        console.log("! get all tag: "+alltag);
 
-        if(allCollection) {
+        if(alltag) {
             res.status(200).json({
                 message: "Status: Get Success",
-                data: allCollection
+                data: alltag
             });
         }
         else {
@@ -84,21 +89,22 @@ module.exports = (router) => {
         }
     });
 
+
     //////////////////////////DELETE/////////////////////////
-    collectionRouteID.delete(async(req, res, next)=>{
-        console.log('===in deleteCollection /:id===');
+    tagRouteID.delete(async(req, res, next)=>{
+        console.log('===in deletetag /:id===');
         console.log("! req.body: "+JSON.stringify(req.body));
         console.log("! req.params: "+JSON.stringify(req.params));
         
-        let toDeleteCollID = req.params.id;
-        if( !(await collectionController.isIDExist(toDeleteCollID)) ){
-            let err = new Error('Status: DELETE Collection Failed. Given collection ID not found');
+        let toDeletetagID = req.params.id;
+        if( !(await tagController.isIDExist(toDeletetagID)) ){
+            let err = new Error('Status: DELETE Tag Failed. Given tag ID not found');
             err.code = 404;
             next(err); 
             return;
         }
 
-        collectionModel.findByIdAndDelete(toDeleteCollID)
+        tagModel.findByIdAndDelete(toDeletetagID)
             .then(result =>{
                 console.log("! result: "+result);
                 if(result)
@@ -109,5 +115,7 @@ module.exports = (router) => {
             }).catch(next);     
     });
 
+
     return router;
 }
+ 

@@ -19,7 +19,11 @@ var TaskSchema = new Schema({
         required: true,
     },
     description: String,
-    tag: String,
+    tag: {
+        type: Schema.Types.ObjectId,
+        default: "", 
+        ref: "tag"
+    },
     duration: {
         type: Number,
         default: 0,
@@ -29,8 +33,10 @@ var TaskSchema = new Schema({
         default: Date.now(),
     },
     assignedCollection:{
-        type: String,
+        type: Schema.Types.ObjectId,
         default: "", 
+        ref: "collection",
+        required: true
     }
 })
 
