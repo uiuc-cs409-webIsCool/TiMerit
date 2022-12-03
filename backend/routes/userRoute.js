@@ -71,33 +71,46 @@ router.post('/signup', async(req, res) => {
     // })    
 });
 
-router.post('/login',(req,res) => {
-    User.findOne({email: req.body.email})
-    .then((user) => {
-        if (!user) {
-            res.status(400).send({
-                message:'User does not exist', 
-                data: []
-            });
-        }
-        if (req.body.password != user.password) {
-            res.status(400).send({
-                message:'Password is not correct', 
-                data: []
-            });
-        } else {
-            res.status(200).send({
-                message:'Login success', 
-                data: []
-            });
-        }
-    })
-    .catch((err) => {
-        res.status(500).send({
-            message:err.message,
-            data:[]
+
+router.post('/login', async(req, res) => {
+    const user = await User.findOne(req.body);
+    if (user) {
+        res.json({
+            status: "ok",
+            user: true
         })
-    })  
+    } else {
+        res.json({
+            status: "error",
+            user: false
+        })
+    }
+    // User.findOne({email: req.body.email})
+    // .then((user) => {
+    //     if (!user) {
+    //         res.status(400).send({
+    //             message:'User does not exist', 
+    //             data: []
+    //         });
+    //     }
+    //     if (req.body.password != user.password) {
+    //         res.status(400).send({
+    //             message:'Password is not correct', 
+    //             data: []
+    //         });
+    //     } else {
+    //         res.status(200).send({
+    //             message:'Login success', 
+    //             data: []
+    //         });
+    //     }
+    // })
+    // .catch((err) => {
+    //     res.status(500).send({
+    //         message:err.message,
+    //         data:[]
+    //     })
+    // })  
 })
 
 module.exports = router;

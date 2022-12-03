@@ -11,19 +11,37 @@ import { Link } from "react-router-dom";
 
 function Welcome() {
     const [email, setEmail] = useState("");
-    const [fetchedPassword, setFetchedPassword] = useState("");
-    const [inputPassword, setInputPassword] = useState("");
-    const [userExists, setUserExists] = useState(false);
+    const [password, setPassword] = useState("");
 
     /**
      * In frontend, create states to store value of input email and input password.
-     * Use email to throw a get request. If email exists, return the password.
-     * Compare the fetched password with the user input password. If matched, navigate user
-     * to homepage. Otherwise, throw a prompt telling user password is incorrect.
+     * Send a post request with email and password. Backend will return a boolean variable
+     * to indicate whether they're matched.
      */
     async function login() {
         // button's type has been set as button to prevent submiting the form.
-        console.log("Click");
+        const res = await fetch("http://localhost:8080/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                password
+            })
+        });
+        
+        // Extract json data from the response.
+        const data = await res.json();
+        
+        /**
+         * TODO: Redirect user to the home page if successfully logged in. Otherwise, throw a prompt to notice user.
+         */
+        if (data.user) {
+            console.log("Log in!");
+        } else {
+            console.log("User name or password is incorrect.")
+        }
     }
 
 
@@ -40,7 +58,7 @@ function Welcome() {
                         </Col>
                         <Col><Form.Control 
                         type="passowrd" placeholder="Password" style={{width:200}}
-                        onChange={(e) => {setInputPassword(e.target.value)}}/>
+                        onChange={(e) => {setPassword(e.target.value)}}/>
                         </Col>
                         <Col><button type="button" className={styles.login_button} onClick={(e) => {login()}}>Log In</button></Col>
                     </Row>
