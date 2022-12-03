@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import styles from "./Welcome.module.css";
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -10,15 +10,39 @@ import { Link } from "react-router-dom";
 
 
 function Welcome() {
+    const [email, setEmail] = useState("");
+    const [fetchedPassword, setFetchedPassword] = useState("");
+    const [inputPassword, setInputPassword] = useState("");
+    const [userExists, setUserExists] = useState(false);
+
+    /**
+     * In frontend, create states to store value of input email and input password.
+     * Use email to throw a get request. If email exists, return the password.
+     * Compare the fetched password with the user input password. If matched, navigate user
+     * to homepage. Otherwise, throw a prompt telling user password is incorrect.
+     */
+    async function login() {
+        // button's type has been set as button to prevent submiting the form.
+        console.log("Click");
+    }
+
+
     return (
         <div className={styles.container}>
             <div className={styles.login}>
                 <img src={logo} alt="logo" className={styles.logo}/>
                 <Form className={styles.login_form}>
                     <Row>
-                        <Col><Form.Control type="text" placeholder="Email" style={{width:200}}></Form.Control></Col>
-                        <Col><Form.Control type="passowrd" placeholder="Password" style={{width:200}}></Form.Control></Col>
-                        <Col><button type="submit" className={styles.login_button}>Log In</button></Col>
+                        <Col>
+                        <Form.Control
+                        type="text" placeholder="Email" style={{width:200}}
+                        onChange={(e) => {setEmail(e.target.value)}}/>
+                        </Col>
+                        <Col><Form.Control 
+                        type="passowrd" placeholder="Password" style={{width:200}}
+                        onChange={(e) => {setInputPassword(e.target.value)}}/>
+                        </Col>
+                        <Col><button type="button" className={styles.login_button} onClick={(e) => {login()}}>Log In</button></Col>
                     </Row>
                 </Form>
             </div>
