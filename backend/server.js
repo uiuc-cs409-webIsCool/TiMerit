@@ -13,7 +13,17 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 
-// const cors = require('cors');
+mongoose.connect(secrets.mongo_connection, {useNewUrlParser: true});
+
+// Set up middlewares
+// public folder is used to store static resources for the root page
+app.use("/", express.static(path.join(__dirname, "/public")));
+// Allow application recieve json data (parse everything in the request body to json data)
+app.use(express.json());
+// Use the body-parser package in our application
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 const corsOptions ={
     origin:'http://localhost:3000', 
     credentials:true,            //access-control-allow-credentials:true
@@ -21,17 +31,6 @@ const corsOptions ={
 }
 app.use(cors(corsOptions));
 
-mongoose.connect(secrets.mongo_connection, {useNewUrlParser: true});
-
-// Set up middlewares
-// public folder is used to store static resources for the root page
-app.use("/", express.static(path.join(__dirname, "/public")));
-// Allow application recieve json data
-app.use(express.json());
-// Use the body-parser package in our application
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
 
 require("./routes")(app, router);
 

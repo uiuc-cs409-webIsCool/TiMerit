@@ -3,47 +3,72 @@ var express = require('express');
 var User = require('../models/user');
 var router = express.Router();
 
-router.post('/signup',(req,res) => {
-    if (!req.body.firstname || !req.body.lastname || !req.body.email || !req.body.password) {
-        res.status(400).send({
-            message:'No inf provided', 
-            data: []
-        });
-    } 
-    User.findOne({email: req.body.email})
-    .then((user) => {
-        if (!user) {
-            User.create({
-                firstname:req.body.firstname,
-                lastname:req.body.lastname,
-                email:req.body.email,
-                password:req.body.password
-            })
-            .then((users_res) => {
-                res.status(201).send({
-                    message:"User created",
-                    data:users_res
-                })
-            })
-            .catch((err) => {
-                res.status(500).send({
-                    message:err.message,
-                    data:[]
-                })
-            });    
-        } else {
-            res.status(400).send({
-                message:"User already exists",
-                data:[]
-            });
-        }
+router.post('/signup', async(req, res) => {
+    /**
+     * Check every input is better to put at frontend button's handler function.
+     * TODO: Frontend should give user immediate feedback if they are empty.
+     * */
+
+    // if (!req.body.firstname || !req.body.lastname || !req.body.email || !req.body.password) {
+    //     res.status(400).send({
+    //         message:'No inf provided', 
+    //         data: []
+    //     });
+    // } 
+
+    const user = new User({
+        firstname: req.body.firstName,
+        lastname: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password
     })
-    .catch((err) => {
-        res.status(500).send({
-            message:err.message,
-            data:[]
-        })
-    })    
+    try {
+        const data = await user.save();
+        res.status(201).json({message:"Successfully created a user", data: data});
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+
+    /**
+     * It seems no need to check duplicated email here. Because in User model the email
+     * field is defined as unique. It will automatically throw an error if it't not.
+     * TODO: It should also give user feedback at frontend if their input email exists.
+     */
+
+    // User.findOne({email: req.body.email})
+    // .then((user) => {
+    //     if (!user) {
+    //         User.create({
+    //             firstname:req.body.firstname,
+    //             lastname:req.body.lastname,
+    //             email:req.body.email,
+    //             password:req.body.password
+    //         })
+    //         .then((users_res) => {
+    //             res.status(201).send({
+    //                 message:"User created",
+    //                 data:users_res
+    //             })
+    //         })
+    //         .catch((err) => {
+    //             res.status(500).send({
+    //                 message:err.message,
+    //                 data:[]
+    //             })
+    //         });    
+    //     } else {
+    //         res.status(400).send({
+    //             message:"User already exists",
+    //             data:[]
+    //         });
+    //     }
+    // })
+    // .catch((err) => {
+    //     res.status(500).send({
+    //         message:err.message,
+    //         data:[]
+    //     })
+    // })    
 });
 
 router.post('/login',(req,res) => {
