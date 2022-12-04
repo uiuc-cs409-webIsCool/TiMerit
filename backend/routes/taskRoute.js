@@ -3,17 +3,14 @@ const task = require('../models/task');
 var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
-    taskController = require('../controller/taskController'),
-    tagController = require('../controller/tagController'),
+    taskController = require('../controller/taskController'), 
     collectionController = require('../controller/collectionController'),
     toId = mongoose.Types.ObjectId;
 
-require('../models/collection');
-require('../models/tag');
+require('../models/collection'); 
 require('../models/task');
 var taskModel = mongoose.model('task');
-var collectionModel = mongoose.model('collection');
-var tagModel = mongoose.model('tag');
+var collectionModel = mongoose.model('collection'); 
 
 module.exports = (router) => {
     var taskRoute = router.route('/task');
@@ -23,13 +20,23 @@ module.exports = (router) => {
     taskRoute.post(async(req, res, next)=>{
         console.log('===in postTask===');
         console.log("req.body: "+JSON.stringify(req.body));
+
+        //if not given assignedCollection, assign Uncategorized to it
+        var uncategorizedCollection_id = req.body.assignedCollection;
+        if(!uncategorizedCollection_id){
+            uncategorizedCollection_id = await collectionController.getUncategorizedId();
+        }
+        console.log("! uncategorizedCollection_id: "+uncategorizedCollection_id);
+
         const task = new taskModel({
             name: req.body.name,
             description: req.body.description,
-            tag: req.body.tag,
+            completed: req.body.completed,
+            // tag: req.body.tag,
             duration: req.body.duration,
             date: req.body.date,
-            assignedCollection: req.body.assignedCollection
+            assignedCollection: uncategorizedCollection_id,
+            assignedUser: req.body.assignedUser
         });
         console.log("! newTask: "+task);
         task.save().then(async doc =>{
@@ -42,7 +49,9 @@ module.exports = (router) => {
             await collectionController.addTask(req.body.assignedCollection, doc._id);
 
             //after task created, add taskID to given tagID
-            await tagController.addTask(req.body.tag, doc._id);
+            // await tagController.addTask(req.body.tag, doc._id);
+
+
         }).catch((err)=>{
             next(err);
         })    
@@ -59,14 +68,14 @@ module.exports = (router) => {
         const name = req.body.name? (req.body.name): null;
         var nameParam; if(name) nameParam=(name); console.log(nameParam);
         
-        const tag = req.body.tag? (req.body.tag): null;
-        var tagParam; var oldTagId;
-        if(tag) {
-            tagParam=(tag); 
-            console.log(tagParam);
+        // const tag = req.body.tag? (req.body.tag): null;
+        // var tagParam; var oldTagId;
+        // if(tag) {
+        //     tagParam=(tag); 
+        //     console.log(tagParam);
             
-            oldTagId = await taskController.getTagIDFromTaskID(id);
-        }
+        //     oldTagId = await taskController.getTagIDFromTaskID(id);
+        // }
         const description = req.body.description? (req.body.description): null;
         var descriptionParam; if(description) descriptionParam=toId(description); console.log(descriptionParam);
 
@@ -78,7 +87,7 @@ module.exports = (router) => {
             { _id: id },
             { 
                 name: nameParam,
-                tag: tagParam,
+                // tag: tagParam,
                 description: descriptionParam,
                 assignedCollection: assignedCollectionParam
             }, 
@@ -92,13 +101,13 @@ module.exports = (router) => {
                 data: doc
             });
 
-            if(tagParam){
-                //after task created, add taskID to given new tagID
-                await tagController.addTask(req.body.tag, doc._id);
+            // if(tagParam){
+            //     //after task created, add taskID to given new tagID
+            //     await tagController.addTask(req.body.tag, doc._id);
 
-                //goto old tagID, delete taskID from alltask[]
-                await tagController.deleteTask(oldTagId, doc._id);
-            }
+            //     //goto old tagID, delete taskID from alltask[]
+            //     await tagController.deleteTask(oldTagId, doc._id);
+            // }
         }  
         else{
             let err = new Error('Status: Update Failed');
@@ -141,7 +150,7 @@ module.exports = (router) => {
             return;
         }
         let collectionId = await taskController.getCollIDFromTaskID(toDeleteTaskID);
-        let tagId = await taskController.getTagIDFromTaskID(toDeleteTaskID);
+        // let tagId = await taskController.getTagIDFromTaskID(toDeleteTaskID);
 
         //2 delete a task
         taskModel.findByIdAndDelete(toDeleteTaskID)
@@ -158,7 +167,7 @@ module.exports = (router) => {
         await collectionController.deleteTask(collectionId, toDeleteTaskID);
 
         //4 goto tagID, delete taskID from alltask[]
-        await tagController.deleteTask(tagId, toDeleteTaskID);
+        // await tagController.deleteTask(tagId, toDeleteTaskID);
     });
 
 

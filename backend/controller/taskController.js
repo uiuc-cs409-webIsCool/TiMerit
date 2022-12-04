@@ -2,12 +2,10 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose');
 
-require('../models/collection');
-require('../models/tag');
+require('../models/collection'); 
 require('../models/task');
 var taskModel = mongoose.model('task');
-var collectionModel = mongoose.model('collection');
-var tagModel = mongoose.model('tag');
+var collectionModel = mongoose.model('collection'); 
 
 
 const taskController = {
@@ -21,13 +19,13 @@ const taskController = {
     },
 
     /**
-     * given taskID, return its collID
+     * given taskID, return its tagID
      */
-    getTagIDFromTaskID: async(taskID)=>{
-        let doc= await taskModel.findOne({ '_id': taskID });
-        console.log(`taskID: ${taskID}. found its tagId: ${doc.tag}`);
-        return doc.tag;
-    },
+    // getTagIDFromTaskID: async(taskID)=>{
+    //     let doc= await taskModel.findOne({ '_id': taskID });
+    //     console.log(`taskID: ${taskID}. found its tagId: ${doc.tag}`);
+    //     return doc.tag;
+    // },
 
     isTaskIDExist: async (taskId) =>{
         let doc = await taskModel.findOne(
@@ -35,6 +33,8 @@ const taskController = {
         )
         return doc ? true:false;
     },
+
+
 }
 
 module.exports = taskController;
