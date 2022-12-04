@@ -12,7 +12,7 @@ function Signup(event) {
     const [password, setPassword] = useState("");
 
     async function register() {
-        const res = await fetch("http://localhost:8080/api/<replaced-with-defined-api>", {
+        const res = await fetch("http://localhost:8080/api/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -28,8 +28,6 @@ function Signup(event) {
         const data = await res.json();
         console.log(data);
     }
-
-
 
     return (
         <div className={styles.container}>

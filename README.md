@@ -1,4 +1,7 @@
+[toc]
+
 # Schema Definition
+
 ### Collection schema
 1. 'name' - string - REQUIRED
 2. 'allTasks' - objectID[] - storing tasks ID string
@@ -15,6 +18,34 @@
 5. 'date' - Date of creation - default to today's date - unchangeable
 6. 'assignedCollection' - objectID - the _id field of its collection - default to "" - REQUIRED
 
+---
+
+# Supported API Calls
+## schema 2 way reference relationships
+|collection |   task  |   tag   |
+|---|---|---|
+|[taskID1, ID2] <-->   |<--> _id| |
+|            |    _id <-->|<--> [taskID1, ID2]|
+
+### Tag API
+1. GET - get all tags
+2. DELETE by ID - input an ID, delete it if found
+3. POST - create new tag
+4. PUT - modify name field
+
+### Task API
+1. GET - get all tasks
+2. DELETE by ID - input an ID, delete it if found. Note: will also delete this task from corresponding Tag allTasks[] and Collection allTasks[]
+3. POST - create new task
+4. PUT - modify any field
+
+### Collection API
+1. GET - get all collection
+2. DELETE by ID - input an ID, delete it if found
+3. POST - create new collection
+4. PUT - modify name field
+
+---
 
 # File Structure and Environment Setup
 
@@ -24,13 +55,25 @@ Please read this [post](https://stackoverflow.com/questions/51126472/how-to-orga
 
 # TODOs
 
-- [ ] Define database model
-  - [ ] User
-  - [ ] Collection
-  - [ ] Task
-  - [ ] Anyother model?
+- [x] Define database model
+  - [x] User
+  - [x] Collection
+  - [x] Task
 - [ ] Frontend layout
-- [ ] Backend api: maybe we should implement frontend first then generate api based on the features we want?
+  - [x] Signup layout
+  - [x] Welcome page layout
+  - [ ] Homepage layout
+
+- [ ] Homepage design
+- [ ] Details of Signup function
+  - [ ] Throw error prompt to user if email is registered
+  - [ ] Use regex to inspect whether the password is valid. (length>8, contains at least 1 capital letter, etc.)
+  - [ ] Email authentication
+
+- [ ] Details of Login function
+  - [ ] Throw error prompt to user if email and password are not matched.
+  - [ ] Provide forget password option
+
 
 
 
@@ -53,4 +96,4 @@ Please read this [post](https://stackoverflow.com/questions/51126472/how-to-orga
 # Reference
 1. A very good video to help start the project. [MERN Stack Full Tutorial](https://www.youtube.com/watch?v=CvCiNeLnZ00) from Dave.
 2. Another introduction video of [MERN stack project](https://www.youtube.com/watch?v=VsUzmlZfYNg). (easier)
-3. [User authentication, JWT, Node.js, MongoDB, React and more](https://www.youtube.com/watch?v=Ejg7es3ba2k)
+3. Signup and login are implemented by reference of: [User authentication, JWT, Node.js, MongoDB, React and more](https://www.youtube.com/watch?v=Ejg7es3ba2k)
