@@ -9,6 +9,7 @@ import carousel_image from "./assets/test1.jpg"
 import { Link } from "react-router-dom";
 
 
+
 function Welcome() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -40,7 +41,7 @@ function Welcome() {
         if (data.user) {
             alert("Log in!");
             // Redirect user to the home page
-            // window.location.href = "/home";
+            window.location.href = "/home";
         } else {
             alert("Email or password is incorrect!");
             console.log("User name or password is incorrect.")

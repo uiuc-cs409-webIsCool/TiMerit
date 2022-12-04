@@ -1,8 +1,25 @@
 import { Button, Card, Nav, Col, Row, Container } from "react-bootstrap";
 import "./HomeView.css";
 import userPic from "./assets/defaultUser.png";
+import { useEffect } from "react";
+import jwt from "jsonwebtoken";
 
 function Home() {
+
+	// useEffect(() => {
+	// 	/**
+	// 	 * So the idea is that when users switch to the different Route(page), frontend should remember them
+	// 	 * so that server can still fetch related data for that specific user. Thus, a token is saved at
+	// 	 * the localStorage. And it can be decode to a unique identifier for that user (in this case the 
+	// 	 * email).
+	// 	 */
+	// 	const token = localStorage.getItem("token");
+	// 	// if (token) {
+	// 	// 	const user = jwt.decode(token);
+	// 	// }
+	// })
+
+
   return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
