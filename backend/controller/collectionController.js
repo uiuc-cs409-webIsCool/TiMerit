@@ -2,13 +2,31 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose');
 
-require('../models/collection');
-require('../models/tag');
+require('../models/collection'); 
 require('../models/task');
 var taskModel = mongoose.model('task');
-var collectionModel = mongoose.model('collection');
-var tagModel = mongoose.model('tag');
+var collectionModel = mongoose.model('collection'); 
 
+var uncategorizedCollection_id;
+
+const privateMethods = {
+    isUncategorizedExist: async()=>{
+        return (await findUncategorizedId()) ? true : false;
+    },
+
+    createUncategorizedAndFindId: async()=>{
+        const newCollection = mongoose.model('Uncategorized', collectionModel); 
+        console.log(newCollection)
+    },
+
+    findUncategorizedId: async()=>{
+        let doc = await collectionModel.findOne(
+            {"name": "Uncategorized"}
+        )
+        console.log("! findUncategorizedId return id: "+doc._id);
+        return doc._id;
+    }
+}
 
 const collectionController = {
     /**
@@ -50,6 +68,37 @@ const collectionController = {
             {"_id": id}
         )
         return doc ? true:false;
+    },
+
+
+    getUncategorizedId: async()=> {
+        // if(!uncategorizedCollection_id){
+        //     if(!(await privateMethods.isUncategorizedExist))
+        //         await privateMethods.createUncategorizedAndFindId;
+        //     else
+        //         await privateMethods.findUncategorizedId;
+        // }
+
+        //check if exist
+        let doc = await collectionModel.findOne(
+            {"name": "Uncategorized"}
+        )
+        if(doc) {
+            console.log("! findUncategorizedId return id: "+doc._id);
+
+            uncategorizedCollection_id=doc._id;
+            return doc._id;
+        }
+        else {
+            //if not exsit create new one.
+            const newCollection = await collectionModel.create({ name: 'Uncategorized' });
+
+            console.log("Uncategorized does not exist. create new one: "+ newCollection);
+
+            uncategorizedCollection_id = newCollection._id;
+            return newCollection._id;
+        }
+
     },
 }
 
