@@ -25,7 +25,7 @@ var TaskSchema = new Schema({
         type: Schema.Types.ObjectId,
         default: "", 
         ref: "user",
-        // required: true
+        required: true
     },
     duration: {
         type: Number,
