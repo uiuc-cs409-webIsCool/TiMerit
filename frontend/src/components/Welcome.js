@@ -38,8 +38,11 @@ function Welcome() {
          * TODO: Redirect user to the home page if successfully logged in. Otherwise, throw a prompt to notice user.
          */
         if (data.user) {
-            console.log("Log in!");
+            alert("Log in!");
+            // Redirect user to the home page
+            // window.location.href = "/home";
         } else {
+            alert("Email or password is incorrect!");
             console.log("User name or password is incorrect.")
         }
     }

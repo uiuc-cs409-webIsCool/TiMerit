@@ -97,3 +97,4 @@ Please read this [post](https://stackoverflow.com/questions/51126472/how-to-orga
 1. A very good video to help start the project. [MERN Stack Full Tutorial](https://www.youtube.com/watch?v=CvCiNeLnZ00) from Dave.
 2. Another introduction video of [MERN stack project](https://www.youtube.com/watch?v=VsUzmlZfYNg). (easier)
 3. Signup and login are implemented by reference of: [User authentication, JWT, Node.js, MongoDB, React and more](https://www.youtube.com/watch?v=Ejg7es3ba2k)
+4. Use Authentication: [The best explanation of JWT on YouTube](https://www.youtube.com/watch?v=soGRyl9ztjI)
