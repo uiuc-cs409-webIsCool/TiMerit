@@ -51,7 +51,17 @@
 
 Please read this [post](https://stackoverflow.com/questions/51126472/how-to-organise-file-structure-of-backend-and-frontend-in-mern) for an introduction of the file structure of a MERN stack project. One thing to notice is that I have added `node_modules` directory into the .gitignore file so that installed packages won't be pushed to the remote. It seems as long as package json file is pushed, it will automatically synchronize the environment.
 
+# User Authentication
 
+The idea is that when users switch to the different Route (page), frontend should remember them, so that server can still fetch related data for that specific user. Thus, a token is saved at the localStorage. And it can be decoded to a unique identifier for that user (in this case the email).
+
+## An example of log in process
+
+1. In the frontend, when user clicks login button, login() sends a post request to the route api/login.
+2. In the backend, after find the valid email in the database, jwt will encrypt the email address and send it to the front end.
+3. In login(), check if the data sent from backend is not empty, it stores the token in the localStorage. Then it navigates to the homepage.
+4. In the homepage(frontend), when making request, pass token through headers.
+5. When the backend deals with the request from home page, it first decodes the token to get the email and knows from which user this request comes.
 
 # TODOs
 

@@ -77,7 +77,7 @@ router.post('/login', async(req, res) => {
     const user = await User.findOne(req.body);
 
     if (user) {
-
+        // return the encrypted email
         const token = jwt.sign({
             email: req.body.email
         }, "shhhhh");
@@ -118,6 +118,19 @@ router.post('/login', async(req, res) => {
     //         data:[]
     //     })
     // })  
+})
+
+router.get("/login", async(req, res) => {
+    const token = req.headers["x-access-token"];
+    try {
+        const decoded = jwt.verify(token, "shhhhh");
+        const email = decoded.email;
+    } catch (err) {
+        res.status(400).send({
+            message: "Invalid token",
+            error: err.message
+        });
+    }
 })
 
 module.exports = router;

@@ -27,6 +27,9 @@ function Signup(event) {
 
         const data = await res.json();
         console.log(data);
+        if (data.data) {
+            window.location.href = "/";
+        }
     }
 
     return (

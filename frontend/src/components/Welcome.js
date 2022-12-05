@@ -36,10 +36,13 @@ function Welcome() {
         const data = await res.json();
         
         /**
-         * TODO: Redirect user to the home page if successfully logged in. Otherwise, throw a prompt to notice user.
+         * TODO: If password incorrect, throw a prompt to notice user.
          */
         if (data.user) {
             alert("Log in!");
+            // store token in local storage because we gonna be redrected to the homepage.
+            localStorage.setItem("token", data.user);
+
             // Redirect user to the home page
             window.location.href = "/home";
         } else {
