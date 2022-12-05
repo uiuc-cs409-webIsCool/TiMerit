@@ -1,4 +1,5 @@
 import { React, useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import {Form, Row} from 'react-bootstrap'
@@ -35,8 +36,14 @@ function Signup(event) {
     return (
         <div className={styles.container}>
             <div className={styles.signupForm}>
-                <Row className={styles.title}><h3>Sign up for better experiences</h3></Row>
-
+                <Row className={styles.title}>
+                    <div>
+                        <Link to="/" >
+                            <span>&times;</span>
+                        </Link>
+                        <h3>Sign up for better experiences</h3>
+                    </div>
+                </Row>
                 <Row className={styles.name_row}>
                     <Form.Control 
                     type="text" placeholder="First name" className={styles.name_input}
