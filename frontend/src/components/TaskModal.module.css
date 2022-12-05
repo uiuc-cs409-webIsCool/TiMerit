@@ -1,0 +1,23 @@
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1200px; /* 设置modal的宽度 */
+    height: 800px; /* 设置modal的高度 */
+    z-index: 10; /* 设置modal的层级，使其在其他内容之上 */
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 25px;
+}
+
+
+.close_button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 25px;
+}
+
