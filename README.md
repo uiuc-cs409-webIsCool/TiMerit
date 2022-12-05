@@ -55,6 +55,8 @@ Please read this [post](https://stackoverflow.com/questions/51126472/how-to-orga
 
 The idea is that when users switch to the different Route (page), frontend should remember them, so that server can still fetch related data for that specific user. Thus, a token is saved at the localStorage. And it can be decoded to a unique identifier for that user (in this case the email).
 
+[中文解析](https://www.infoq.cn/article/xeirmzbscwxjoyc3hflv)
+
 ## An example of log in process
 
 1. In the frontend, when user clicks login button, login() sends a post request to the route api/login.
