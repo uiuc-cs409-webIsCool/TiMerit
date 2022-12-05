@@ -1,8 +1,42 @@
 import { Button, Card, Nav, Col, Row, Container } from "react-bootstrap";
 import "./HomeView.css";
 import userPic from "./assets/defaultUser.png";
+import { useEffect } from "react";
+import jwt_decode from "jwt-decode";
 
 function Home() {
+	async function test() {
+		// const req = await fetch("http://localhost:8080/api/test", {
+		// 	headers: {
+		// 		"x-access-token": localStorage.getItem("token")
+		// 	},
+		// })
+
+		// const data = req.json();
+		// console.log(data);
+	}
+
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token) {
+			console.log(token);
+			const user = jwt_decode(token);
+			console.log(user);
+
+			if (!user) {
+				localStorage.removeItem("token");
+				window.location.href = "/";
+			} else {
+				test();
+			}
+		}
+	}, [])
+
+
+
+
+
+
   return (
 	<div className="outer-container-div">
 	<Container className="outer-container">

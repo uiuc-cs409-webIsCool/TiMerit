@@ -2,10 +2,11 @@ const { application } = require('express');
 var express = require('express');
 var User = require('../models/user');
 var router = express.Router();
+var jwt = require("jsonwebtoken");
 
 router.post('/signup', async(req, res) => {
     /**
-     * Check every input is better to put at frontend button's handler function.
+     * Check every input is better to put at frontend button's handler function. (I am not sure)
      * TODO: Frontend should give user immediate feedback if they are empty.
      * */
 
@@ -74,10 +75,16 @@ router.post('/signup', async(req, res) => {
 
 router.post('/login', async(req, res) => {
     const user = await User.findOne(req.body);
+
     if (user) {
+        // return the encrypted email
+        const token = jwt.sign({
+            email: req.body.email
+        }, "shhhhh");
+
         res.json({
             status: "ok",
-            user: true
+            user: token
         })
     } else {
         res.json({
@@ -111,6 +118,19 @@ router.post('/login', async(req, res) => {
     //         data:[]
     //     })
     // })  
+})
+
+router.get("/login", async(req, res) => {
+    const token = req.headers["x-access-token"];
+    try {
+        const decoded = jwt.verify(token, "shhhhh");
+        const email = decoded.email;
+    } catch (err) {
+        res.status(400).send({
+            message: "Invalid token",
+            error: err.message
+        });
+    }
 })
 
 module.exports = router;
