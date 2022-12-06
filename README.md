@@ -35,9 +35,10 @@
 
 ### Task API
 1. GET - get all tasks
-2. DELETE by ID - input an ID, delete it if found. Note: will also delete this task from corresponding Tag allTasks[] and Collection allTasks[]
-3. POST - create new task
-4. PUT - modify any field
+2. GET by ID - input an ID, GET it if found. 
+3. DELETE by ID - input an ID, delete it if found. Note: will also delete this task from corresponding Tag allTasks[] and Collection allTasks[]
+4. POST - create new task
+5. PUT - modify any field
 
 ### Collection API
 1. GET - get all collection
