@@ -79,3 +79,20 @@ body{
 .mainContent-container{
     margin: 30px;
 }
+
+
+/* Let blocks can be put in horizontal direction */
+.block-group {
+    display: flex;
+  }
+/* Let each block occupies the full size of a row, and adjust when the width changes */
+.block {
+  width: 200px;
+  height: 100px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  flex: 1;
+}
