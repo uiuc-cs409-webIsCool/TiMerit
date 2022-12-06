@@ -3,12 +3,10 @@ var express = require('express'),
     collectionController = require('../controller/collectionController'),
     mongoose = require('mongoose');
 
-require('../models/collection');
-require('../models/tag');
+require('../models/collection'); 
 require('../models/task');
 var taskModel = mongoose.model('task');
-var collectionModel = mongoose.model('collection');
-var tagModel = mongoose.model('tag');
+var collectionModel = mongoose.model('collection'); 
 
 module.exports = (router) => {
     var collectionRoute = router.route('/collection');
