@@ -109,4 +109,5 @@ The idea is that when users switch to the different Route (page), frontend shoul
 1. A very good video to help start the project. [MERN Stack Full Tutorial](https://www.youtube.com/watch?v=CvCiNeLnZ00) from Dave.
 2. Another introduction video of [MERN stack project](https://www.youtube.com/watch?v=VsUzmlZfYNg). (easier)
 3. Signup and login are implemented by reference of: [User authentication, JWT, Node.js, MongoDB, React and more](https://www.youtube.com/watch?v=Ejg7es3ba2k)
-4. Use Authentication: [The best explanation of JWT on YouTube](https://www.youtube.com/watch?v=soGRyl9ztjI)
+4. DRAGGABLE package: https://www.npmjs.com/package/react-draggable 
+5. Use Authentication: [The best explanation of JWT on YouTube](https://www.youtube.com/watch?v=soGRyl9ztjI)

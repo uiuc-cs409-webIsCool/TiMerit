@@ -46,7 +46,8 @@ module.exports = (router) => {
             });
 
             //after task created, add taskID to given collectionID
-            await collectionController.addTask(req.body.assignedCollection, doc._id);
+            let collID = req.body.assignedCollection ? req.body.assignedCollection: uncategorizedCollection_id;
+            await collectionController.addTask(collID, doc._id);
 
             //after task created, add taskID to given tagID
             // await tagController.addTask(req.body.tag, doc._id);
