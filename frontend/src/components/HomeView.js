@@ -5,12 +5,43 @@ import "./HomeView.css";
 import axios from "axios";
 import userPic from "./assets/defaultUser.png";
 import Draggable, {DraggableCore} from 'react-draggable'; 
+import jwt_decode from "jwt-decode";
 import { json } from "react-router-dom";
 var port = process.env.PORT || 8080;
 console.log("port: " + port);
 
 
 function Home() {
+	async function test() {
+		// const req = await fetch("http://localhost:8080/api/test", {
+		// 	headers: {
+		// 		"x-access-token": localStorage.getItem("token")
+		// 	},
+		// })
+
+		// const data = req.json();
+		// console.log(data);
+	}
+
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token) {
+			console.log(token);
+			const user = jwt_decode(token);
+			console.log(user);
+
+			if (!user) {
+				localStorage.removeItem("token");
+				window.location.href = "/";
+			} else {
+				test();
+			}
+		}
+	}, [])
+
+
+
+
 	let [allCollection, setAllCollection] = useState([]);
 	let [newCollection, setNewCollection] = useState("");
 	let [collectionName, setCollectionName] = useState("");
