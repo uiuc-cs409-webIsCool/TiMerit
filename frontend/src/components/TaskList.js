@@ -1,27 +1,43 @@
-import React from 'react';
-import {useState, useEffect} from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import jwt_decode from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
+
 
 function TaskList() {
+    const navigate = useNavigate()
     const [name, setName] = useState('');
     const [tasks, setTasks] = useState([]);
+    let config = {
+        headers: {'x-access-token': localStorage.getItem('token')}
+    }
+
+    useEffect(() => {
+		const token = localStorage.getItem('token')
+		if (token) {
+			const user = jwt_decode(token)
+			if (!user) {
+				localStorage.removeItem('token')
+				navigate.replace('/')
+			} else {
+				loadTasks()
+			}
+		}
+	}, [])
     
-    useEffect(()=>{
-        const loadTasks = async () => {
+    const loadTasks = async () => {
         try{
-            const res = await axios.get('http://localhost:8080/api/task')
+            const res = await axios.get('http://localhost:8080/api/task',config);
             setTasks(res.data);
-            console.log('render')
-        }catch(err){
+            console.log('render tasks')
+        } catch(err) {
             console.log(err);
         }
-        }
-        loadTasks()
-    },[]);
+    }
     const addTask = async (e) => {
         e.preventDefault();
         try{
-          const res = await axios.post('http://localhost:8080/api/task', {name: name})
+          const res = await axios.post('http://localhost:8080/api/task', {name: name},config)
           setTasks(prev => [...prev, res.data]);
           setName('');
         }catch(err){
@@ -30,7 +46,7 @@ function TaskList() {
     }
     const deleteTask = async (id) => {
         try{
-          const res = await axios.delete(`http://localhost:8080/api/task/${id}`)
+          const res = await axios.delete(`http://localhost:8080/api/task/${id}`,config)
           const newTasks = tasks.filter(task=> task._id !== id);
           setTasks(newTasks);
         }catch(err){

@@ -4,7 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./HomeView.css";
 import axios from "axios";
 import userPic from "./assets/defaultUser.png";
-import Draggable, {DraggableCore} from 'react-draggable'; 
+import Draggable, {DraggableCore} from 'react-draggable';
+import ReactDOM from 'react-dom'; 
 import jwt_decode from "jwt-decode";
 import { json } from "react-router-dom";
 var port = process.env.PORT || 8080;
@@ -148,6 +149,17 @@ function Home() {
 	};
 	const onFormSubmit = (e) => e.preventDefault();  
 
+	// const main_ref = useRef();
+	// let collection_div = main_ref.current;
+	// console.log(collection_div.getBoundingClientRect());
+	// let x = collection_div.getBoundingClientRect().x;
+	// let y = collection_div.getBoundingClientRect().y;
+	// let left = collection_div.getBoundingClientRect().left;
+	// let right = collection_div.getBoundingClientRect().right;
+	// let top = collection_div.getBoundingClientRect().top;
+	// let bottom = collection_div.getBoundingClientRect().bottom;
+	
+
 
 	
 
@@ -180,7 +192,7 @@ return (
 
 {/* MAIN CONTENT left */}
 		<Col xs={12} md={8}> <form className="login-card" onSubmit={onFormSubmit}>
-			<div className="mainContent-div" style={{height:scrollPosition}}> <Container className="mainContent-container">
+			<div className="mainContent-div" /*ref={main_ref}*/ style={{height:scrollPosition}}> <Container className="mainContent-container">
 {/* + sign to add new collection */}
 			<Row sm>  
 				<Card className="plus-addNewCollection" style={{ width: '40rem' }}>
@@ -196,7 +208,7 @@ return (
 			{ //Array.from({ length: 0 })
 				allCollection.length>0 && allCollection.map((aColl, idx) => (
 					<Col lg className="mainContent-card" ref={elementRef}>
-						<Draggable grid={[100, 100]} handle="strong">
+						<Draggable grid={[100, 100]} handle="strong" /*bounds={{left: left-x, top:top-y, right: right-x, bottom: bottom-y}}*/>
 						<div className="box no-cursor">
 							<Card style={{ width: '14rem' }}> 
 								<Card.Header> <strong className="cursor"><div>Drag here</div></strong> </Card.Header>
