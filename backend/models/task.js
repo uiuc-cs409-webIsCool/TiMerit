@@ -22,9 +22,8 @@ var TaskSchema = new Schema({
     },
     description: String,
     assignedUser: {
-        type: Schema.Types.ObjectId,
+        type: String,
         default: "", 
-        ref: "user",
         required: true
     },
     duration: {

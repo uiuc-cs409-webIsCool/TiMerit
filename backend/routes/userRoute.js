@@ -3,7 +3,6 @@ var express = require('express');
 var User = require('../models/user');
 var router = express.Router();
 var jwt = require("jsonwebtoken");
-
 router.post('/signup', async(req, res) => {
     /**
      * Check every input is better to put at frontend button's handler function. (I am not sure)
