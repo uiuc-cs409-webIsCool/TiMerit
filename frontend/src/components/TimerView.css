@@ -1,0 +1,63 @@
+.timer-container {
+    font-family: 'Raleway', sans-serif; 
+    background-color:aliceblue;
+}
+
+.innerCircle {
+    border: 2px solid #6C5B7B;
+    background-color: #F8B195;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    position: relative;
+    float: none;
+    margin: 0 auto;
+    margin-top: 100px ;
+}
+
+.timer{
+    font-size: 50pt;
+    position: absolute;
+    margin: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+}
+
+.buttonrow {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 100px;
+}
+
+.Startbutton {
+    width: 200px;
+    height: 150px;
+    border-radius: 5pt;
+    border: 2px solid rgb(237, 123, 169);
+    background-color: #e8a990;
+    font-size: 30pt;
+    position: absolute;
+    left: 20%;
+}
+
+.Stopbutton {
+    width: 200px;
+    height: 150px;
+    border-radius: 5pt;
+    border: 2px solid rgb(237, 123, 169);
+    background-color: #e8a990;
+    font-size: 30pt;
+    position: absolute;
+    right: 20%;
+}
+
+.Startbutton:hover {
+    opacity: 0.8;
+}
+
+.Stopbutton:hover {
+    opacity: 0.8;
+}
