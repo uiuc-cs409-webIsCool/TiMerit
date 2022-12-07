@@ -8,11 +8,14 @@ import logo from "./assets/test.png"
 import carousel_image from "./assets/test1.jpg"
 import { Link } from "react-router-dom";
 
+import TaskModal from "./TaskModal";
+
 
 
 function Welcome() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showModal, setShowModal] = useState(false);
 
     /**
      * In frontend, create states to store value of input email and input password.
@@ -51,9 +54,20 @@ function Welcome() {
         }
     }
 
+    function handleClick() {
+        setShowModal(true);
+    }
+
+    function handleClose() {
+        setShowModal(false);
+    }
 
     return (
         <div className={styles.container}>
+            {showModal && (
+                <TaskModal title={"This is a modal"} onClose={handleClose}/>
+            )}
+            
             <div className={styles.login}>
                 <img src={logo} alt="logo" className={styles.logo}/>
                 <Form className={styles.login_form}>

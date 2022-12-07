@@ -20,6 +20,28 @@
 
 .title {
     margin-top: 10px;
+    overflow: hidden;
+}
+/* Remove the decoration of &times; */
+.title a {
+    text-decoration: none;
+    color: inherit;
+}
+/* make a div for span &times; and h3, so that can let them display in one line */
+.title div {
+    display: flex;
+    align-items: center;
+}
+
+.title div span {
+    margin-left: 30px;
+    margin-top: -15px;
+}
+/* Make h3 display in the middle of the line. */
+.title div h3 {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 .name_input {

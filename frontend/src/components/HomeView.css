@@ -112,7 +112,7 @@ body{
 }
 
 .mainContent-card{
-    margin-bottom: 20px;
+    margin-bottom: 200px;
 }
 .mainContent-plussign{
     display: flex;
@@ -121,4 +121,9 @@ body{
 .mainContent-card-title{
     text-align: center;
     margin: 10px auto;
+}
+.mainContent-taskList{
+    overflow-y: scroll;
+    flex: 1;
+
 }

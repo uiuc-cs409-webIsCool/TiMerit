@@ -25,5 +25,32 @@
 ## TODO
 - [x] default PLUS sign to add new collection
 - [x] display all exisitng collection
-- [ ] have a PLUS sign inside collection to add new task
-- [ ] display all existing tasks of a collection
+- [ ] move TASK code inside of collection
+- [ ] comment out loadData() before push
+
+
+
+// coll && coll.allTasks && coll.allTasks.map(async (taskId)=>(
+					
+					// await axios.get(
+					// 	"http://localhost:" + port + "/api/task/"+taskId,
+					// 	{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+					// .then(function (response) {
+					// 	console.log("===Task Get success===taskId: "+taskId); 
+					// 	if (response.data.data) {
+					// 		const taskName = response.data.data.name;
+					// 		setTaskId_name(taskId_name.set(taskId, taskName));
+					// 	}
+					// 	else {
+					// 		console.log("===Task get FAILED==="); 
+					// 	}
+					// })
+					// .catch(function (error) {
+					// 	console.log("===Task get FAILED==="); 
+					// 	console.log(error); 
+					// })
+				// ))
+			}
+			// recvData.map((coll) => (
+				
+			// ))
