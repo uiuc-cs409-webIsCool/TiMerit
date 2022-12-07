@@ -7,18 +7,20 @@ import userPic from "./assets/defaultUser.png";
 import Draggable, {DraggableCore} from 'react-draggable'; 
 import jwt_decode from "jwt-decode";
 import { json } from "react-router-dom";
+import TaskModal from "./TaskModal";
 var port = process.env.PORT || 8080;
-console.log("port: " + port);
+// console.log("port: " + port);
 
 
 function Home() {
-	// Define Hooks:
-	const [blocks, setBlocks] = useState([
-		{id: 1, content: "Block 1"},
-		{id: 2, content: "Block 2"},
-		{id: 3, content: "Block 3"},
-		{id: 4, content: "Block 4"}
-	]);
+	let [currentTask, setCurrentTask] = useState(null);
+	let [allCollection, setAllCollection] = useState([]);
+	let [newCollection, setNewCollection] = useState("");
+	let [collectionName, setCollectionName] = useState("");
+	let [showModal, setShowModal] = useState(false);
+	let [success, setSuccess] = useState(false);
+	let [fail, setFail] = useState(false);
+	
 
 
 	async function test() {
@@ -36,9 +38,9 @@ function Home() {
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (token) {
-			console.log(token);
+			// console.log(token);
 			const user = jwt_decode(token);
-			console.log(user);
+			// console.log(user);
 
 			if (!user) {
 				localStorage.removeItem("token");
@@ -49,96 +51,34 @@ function Home() {
 		}
 	}, [])
 
-
-
 	/**
-	 * Handler functions:
-	 * */ 
-	// To handle the start of a drag operation
-	const handleDragStart = (event, id) => {
-		event.dataTransfer.setData("id", id);
-	}
+	 * Handler function to show modals
+	 */
+	function handleClick(task) {
+		setCurrentTask(task);
+        setShowModal(true);
+    }
 
-	// To handle the drag operation as the mouse moves
-	const handleDragOver = (event, id) => {
-		// Prevent default behavior to allow the element to be dropped
-		event.preventDefault();
-	}
-
-	// To handle the drop event when it occurs
-	const handleDrop = (event, targetId) => {
-		// When dragging finished, and store the updated blocks.
-		const updatedBlocks = blocks.map((block1) => {
-			// TODO: the following is difficult, need to find the closestBlock to change the position when mouse drop down the block
-			if (block1.id === targetId) {
-            // Get the x and y coordinates of the mouse when the drag operation finished
-            // const x = event.clientX;
-            // const y = event.clientY;
-			// let closestBlock;
-            // let minDistance = Number.MAX_SAFE_INTEGER;
-
-			// blocks.forEach((block2) => {
-			// 	// Get the bounding rect of the block
-			// 	const rect = block2.getBoundingClientRect();
-
-			// 	// Calculate the distance between the block and the mouse coordinates
-			// 	const distance = Math.sqrt(
-			// 		Math.pow(rect.x - x, 2) +
-			// 		Math.pow(rect.y - y, 2)
-			// 	);
-
-			// 	// If the distance is smaller than the current minimum distance, update closestBlock and minDistance
-			// 	if (distance < minDistance) {
-			// 		closestBlock = block2;
-			// 		minDistance = distance;
-			// 	}
-			// });
-			// const index = blocks.indexOf(closestBlock);
-            // blocks.splice(index, 0, block1);
-		}
-		return block1;
-        });
-        setBlocks(updatedBlocks);
-	}
+    function handleClose() {
+        setShowModal(false);
+    }
 
 
 
-
-	// Let blocks be the params of Array.from() and return every the same block from it.
-	// Thus, it generates a new Array as the copy of the blocks. 
-	const groupedBlocks = Array.from(blocks, (block) => 
-	block).reduce((result, value, index, array) => { // result is the current array, index is the index of the current block
-		// array is the same as blocks.
-		if (index % 2 === 0) {
-			result.push(array.slice(index, index + 2));
-		}
-
-		return result;
-	}, []);
-	// groupedBlocks is an array of arrays. [[Block1, Block2], [[Block3, Block4]].
-
-
-	let [allCollection, setAllCollection] = useState([]);
-	let [newCollection, setNewCollection] = useState("");
-	let [collectionName, setCollectionName] = useState("");
-	let [success, setSuccess] = useState(false);
-	let [fail, setFail] = useState(false);
-	
-	
 	// get collection from db
 	useEffect(()=>{
 		axios.get(
 			"http://localhost:" + port + "/api/collection",
 			{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 		.then(function (response) {
-			console.log("===Collection Get success===");
+			// console.log("===Collection Get success===");
 
 			if (response.data.data) {
 				const recvData = response.data.data;
 				setAllCollection(recvData)
 
-				console.log(recvData);
-				console.log(allCollection);
+				// console.log(recvData);
+				// console.log(allCollection);
 
 				setSuccess(true);
 				setTimeout(() => {
@@ -150,7 +90,7 @@ function Home() {
 			}
 		})
 		.catch(function (error) {
-			console.log("===Collection get FAILED==="); 
+			// console.log("===Collection get FAILED==="); 
 			console.log(error);
 			setFail(true);
 			setTimeout(() => {
@@ -180,7 +120,7 @@ function Home() {
 		if(elementRef.current) 
 			setCardHeight(elementRef.current.clientHeight);
 	}, []); 
-	console.log("scrollPosition "+scrollPosition+". allCollection.length="+allCollection.length);
+	// console.log("scrollPosition "+scrollPosition+". allCollection.length="+allCollection.length);
 
 
 // remap after new collection inserted
@@ -197,7 +137,7 @@ function Home() {
 				{ name: collectionName },
 				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 			.then(function (response) {
-				console.log("===Collection create success==="+JSON.stringify(response.data.data)); 
+				// console.log("===Collection create success==="+JSON.stringify(response.data.data)); 
 				if (response.data.data._id) {
 					setNewCollection(response.data.data);
 					// setAllCollection(allCollection=>[...allCollection, response.data.data._id]);
@@ -230,8 +170,11 @@ function Home() {
 return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
+	{showModal && (
+                <TaskModal onClose={handleClose} task_id={currentTask}/>
+	)}
 	<Row>
-{/* NAV BAR right */}
+{/* NAV BAR */}
 		<Col xs={6} md={4} className="col-leftside-container">
 			<Row className="to-center" id="row-leftside-container">
 				<div className="userPic-container">
@@ -254,7 +197,7 @@ return (
 			</Row>
 		</Col>
 
-{/* MAIN CONTENT left */}
+{/* MAIN CONTENT */}
 		<Col xs={12} md={8}> <form className="login-card" onSubmit={onFormSubmit}>
 			<div className="mainContent-div" style={{height:scrollPosition}}> <Container className="mainContent-container">
 {/* + sign to add new collection */}
@@ -269,7 +212,8 @@ return (
 			</Row>
 
 			<Row lg={2} style={{height: cardheight}}>
-			{ //Array.from({ length: 0 })
+			{
+				// Check if allCollection is empty. If not iterate through the collection, and create <Col/> for each item.
 				allCollection.length>0 && allCollection.map((aColl, idx) => (
 					<Col lg className="mainContent-card" ref={elementRef}>
 						<Draggable grid={[100, 100]} handle="strong">
@@ -280,7 +224,7 @@ return (
 								<ListGroup variant="flush">
 								{
 									aColl && aColl.allTasks && aColl.allTasks.map((task) => (
-										<ListGroup.Item eventKey={task}>task id is: {task}</ListGroup.Item>
+										<ListGroup.Item eventKey={task} onClick={() => {handleClick(task)}}>task id is: {task}</ListGroup.Item>
 									))
 								}
 								</ListGroup>
@@ -293,7 +237,7 @@ return (
 
 
 			</Row> 
-			</Container>  </div>
+	</Container>  </div>
 		</form></Col>
 		
 	</Row>
