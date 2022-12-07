@@ -55,8 +55,12 @@ function Home() {
 	 * Handler function to show modals
 	 */
 	function handleClick(task) {
-		setCurrentTask(task);
         setShowModal(true);
+		axios.get(`http://localhost:8080/api/task/${task}`,{ headers: { "Access-Control-Allow-Origin": "*" }, })
+		.then(function(response) {
+			setCurrentTask(response.data.data);
+			console.log(response.data.data);
+		})
     }
 
     function handleClose() {
@@ -171,7 +175,7 @@ return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
 	{showModal && (
-                <TaskModal onClose={handleClose} task_id={currentTask}/>
+                <TaskModal onClose={handleClose} task={currentTask}/>
 	)}
 	<Row>
 {/* NAV BAR */}
