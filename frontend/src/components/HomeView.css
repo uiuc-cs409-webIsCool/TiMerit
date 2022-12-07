@@ -8,6 +8,10 @@ body{
 .plus-addNewCollection{
     border-width: 0;
 }
+.list-group-item.active{
+    background-color: rgb(98, 24, 234);
+    /* color: black; */
+}
 
 /* draggable */
 .react-draggable, .cursor {
@@ -125,5 +129,8 @@ body{
 .mainContent-taskList{
     overflow-y: scroll;
     flex: 1;
-
+    /* margin: 5px auto; */
+}
+.mainContent-addNewTask-inputGroup{
+    margin-top: 2px;
 }

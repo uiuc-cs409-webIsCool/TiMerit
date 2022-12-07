@@ -1,4 +1,4 @@
-import { Button, Card, Nav, Col, Row, Container, ListGroup, Form } from "react-bootstrap";
+import { Button, Card, Nav, Col, Row, Container, ListGroup, Form, InputGroup } from "react-bootstrap";
 import { React, useState, useRef, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./HomeView.css";
@@ -17,27 +17,18 @@ function Home() {
 	let [allCollection, setAllCollection] = useState([]);
 	let [taskId_name, setTaskId_name] = useState(new Map()); //KEY: id, VALUE: name
 	let [newCollection, setNewCollection] = useState("");
+	let [newTaskId, setNewTaskId] = useState("");
+	let [newTaskInfo, setNewTaskInfo] = useState("");
 	let [collectionName, setCollectionName] = useState("");
 	let [success, setSuccess] = useState(false);
-	let [fail, setFail] = useState(false);
-	const navigate = useNavigate() 
+	let [submitDone, setSubmitDone] = useState(true);
+	let [currInputFieldVal, setCurrInputFieldVal] = useState("");
+	const navigate = useNavigate(); 
+	
 	console.log(allCollection);
+	console.log(taskId_name);
 
 	useEffect( () => {
-		const token = localStorage.getItem("token");
-		if (token) {
-			console.log(token);
-			const user = jwt_decode(token);
-			console.log(user);
-
-			if (!user) {
-				localStorage.removeItem('token')
-				navigate.replace('/')
-			} else {
-                // loadCollection()
-			} 
-		}
-
 		var recvData;
 		// get collection from db
 		const loadCollection = async ()=>{
@@ -82,8 +73,11 @@ function Home() {
 						if(response){
 							if (response.data.data) {
 								console.log("===Task Get success===taskId: "+taskId); 
-								const taskName = response.data.data.name;
-								setTaskId_name(taskId_name.set(taskId, taskName));
+								// const taskName = response.data.data.name;
+								const taskInfo = {	name: response.data.data.name, 
+													assignedUser: response.data.data.assignedUser, 
+													completed: response.data.data.completed}
+								setTaskId_name(taskId_name.set(taskId, taskInfo));
 							}
 							else {
 								console.log("===Task get FAILED==="); 
@@ -99,7 +93,22 @@ function Home() {
 			console.log("===!!!!Task get FINISHED!!!!==="); 
 		};
 
-		loadCollection()
+		// loadCollection()
+
+
+		const token = localStorage.getItem("token");
+		if (token) {
+			console.log(token);
+			const user = jwt_decode(token);
+			console.log(user);
+
+			if (!user) {
+				localStorage.removeItem('token')
+				navigate.replace('/')
+			} else {
+                loadCollection()
+			} 
+		}
 	}, [])
 
 
@@ -130,14 +139,24 @@ function Home() {
 	// console.log("scrollPosition "+scrollPosition);
 
 
-// remap after new collection inserted
+// remap after new collection/task inserted
 	useEffect(() => { 
 		setAllCollection([...allCollection, newCollection]);
 	}, [newCollection]);
+	useEffect(() => { 
+	}, [allCollection]);
+	useEffect(() => { 
+		setTaskId_name(taskId_name.set(newTaskId, newTaskInfo));
+	}, [newTaskInfo]);
 
+	
 
-	const handleSubmit = (operation, e) => {
+// all interactions with backend 
+	const handleSubmit = async (operation, e, input_id) => {
+		setSubmitDone(false)
 		if(operation==="newCollection"){
+			if(e) e.preventDefault();
+
 			console.log("handleSubmit: newCollection");
 			axios.post(
 				"http://localhost:" + port + "/api/collection",
@@ -156,8 +175,100 @@ function Home() {
 				console.log("===Collection create FAILED==="); 
 				console.log(error); 
 			})
-		}; 
-		if(e) e.preventDefault();
+		}
+		else if(operation==="completeTask"){
+			const before = taskId_name.get(input_id).completed;
+			const after = !before;
+			console.log("handleSubmit: completeTask. before: "+before+". after: "+after);
+			//1 change data in db
+			axios.put(
+				"http://localhost:" + port + "/api/task/"+input_id,
+				{ completed: after.toString() },
+				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+			.then(function (response) {
+				console.log("===Task completeTask success==="+JSON.stringify(response.data.data));
+				
+				//2 refresh local data
+				taskId_name.get(input_id).completed = after
+			})
+			.catch(function (error) {
+				console.log("===Task completeTask FAILED==="); 
+				console.log(error); 
+			})
+		}
+		else if(operation==="newTask"){
+			const taskName = currInputFieldVal;
+			const token = localStorage.getItem('token');
+			const user_raw = jwt_decode(token);
+			const taskUser = user_raw.email;
+			console.log("handleSubmit: newTask. taskName: "+taskName+". taskUser: "+taskUser);
+			//1 change data in db
+			await axios.post(
+				"http://localhost:" + port + "/api/task",
+				{ 
+					name: taskName,
+					assignedUser: taskUser,
+					assignedCollection: input_id
+				},
+				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+			.then(async function (response) {
+				console.log("===Task create success==="+JSON.stringify(response.data.data));
+				
+				const taskId = response.data.data._id;
+
+				//2 refresh local data
+				const taskInfo = {	
+					name: response.data.data.name, 
+					assignedUser: response.data.data.assignedUser, 
+					completed: response.data.data.completed
+				};
+				// setTaskId_name(taskId_name.set(taskId, taskInfo))
+				setNewTaskId(taskId);
+				setNewTaskInfo(taskInfo);
+
+				//3 insert new task to collection local data
+				await axios.get(
+					"http://localhost:" + port + "/api/collection/"+input_id,
+					{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+					.then(function (response) {
+			
+						if (response.data.data) {
+							const recvData = response.data.data; 
+							for(let i=0; i<allCollection.length; i++){
+								if(allCollection[i]._id==input_id){
+									allCollection[i] = recvData
+									console.log("===Collection:id Get success=== recvData"+JSON.stringify(recvData));
+									console.log(allCollection)
+									break
+								}
+							}
+							
+						}
+						else {
+							console.log("===Collection:id get FAILED. not found response.data.data._id==="); 
+						}
+					})
+					.catch(function (error) {
+						console.log("===Collection:id get FAILED==="); 
+						console.log(error); 
+					})
+
+					setSubmitDone(true)
+				// for(let i = 0; i < allCollection.length; i++) {
+				// 	if(allCollection[i]['_id']==input_id) {
+				// 		allCollection[i].allTasks.push(taskId)
+				// 		break;
+				// 	}
+				// }
+			})
+			.catch(function (error) {
+				console.log("===Task create FAILED==="); 
+				console.log(error); 
+				setSubmitDone(true)
+
+			})
+		}
+		// setSubmitDone(true)
 	};
 	const onFormSubmit = (e) => e.preventDefault();  
 
@@ -194,8 +305,8 @@ return (
 			</Row>
 		</Col>
 
-{/* MAIN CONTENT left */}
-		<Col xs={12} md={8}> <form className="login-card" onSubmit={onFormSubmit}>
+{/* MAIN CONTENT left   onSubmit={onFormSubmit}*/}
+		<Col xs={12} md={8}> <form className="login-card" >
 			<div className="mainContent-div" style={{height:scrollPosition}}> <Container className="mainContent-container">
 {/* + sign to add new collection */}
 			<Row sm>  
@@ -203,26 +314,51 @@ return (
 					<Card.Body className="mainContent-plussign">  
 						<Form.Control style={{ width: '20rem' }} name="collectionName" type="text" placeholder="Enter Your New Collectipn Name"
 							onChange={(e) => setCollectionName(e.target.value)} />
-						<Button className="mainContent-plussign" variant="primary" onClick={(e) => handleSubmit("newCollection", e)}>+</Button>
+						<Button className="mainContent-plussign" variant="primary" onClick={(e) => handleSubmit("newCollection", e, 0)}>+</Button>
 					</Card.Body>
 				</Card>
 			</Row>
 
 			<Row lg={2} style={{height: cardheight}}>
-			{ //Array.from({ length: 0 })
-				allCollection.length>0 && allCollection.map((aColl, idx) => (
-					<Col lg className="mainContent-card" ref={elementRef}>
+			{ //Array.from({ length: 0 }) submitDone===true &&
+				allCollection.length>0 && allCollection.map((aColl) => (
+					<Col lg className="mainContent-card" ref={elementRef} >
 						<div className="box no-cursor">
-							<Card style={{ width: '14rem' }}> 
-								<Card.Title className="mainContent-card-title">{aColl['name']}</Card.Title>
-								<ListGroup variant="flush" className="mainContent-taskList">
-								<Scrollbars style={{ height: 300 }}>
+							<Card style={{ width: '14rem' }} > 
+								<Card.Title className="mainContent-card-title">{aColl['name']}</Card.Title> 
+								<ListGroup variant="flush" className="mainContent-taskList" >
+								<Scrollbars style={{ height: 260 }} className="mainContent-scrollbar">
 								{
-									aColl && aColl.allTasks && aColl.allTasks.map((taskId) => (
-										<ListGroup.Item eventKey={taskId}>{taskId_name.get(taskId)}</ListGroup.Item>
+									 aColl && aColl.allTasks && aColl.allTasks.map((taskId) => (
+										<div key={taskId}> 
+											<ListGroup.Item eventKey={taskId}>
+												<div className="item-content" > 
+													<Form.Check 
+														type='checkbox'
+														defaultChecked = {taskId_name.get(taskId).completed}
+														className='default-checkbox'
+														onClick={(e) => handleSubmit("completeTask", e, taskId)}
+														label = {taskId_name.get(taskId).name}
+														>
+													</Form.Check>
+												</div>
+											</ListGroup.Item> 
+											</div>	
 									))
-								}								
-								</Scrollbars>
+								}				
+								</Scrollbars> 
+								<InputGroup className="mainContent-addNewTask-inputGroup">
+									<Form.Control
+										placeholder="Enter a task..." 
+										onChange={(e) => setCurrInputFieldVal(e.target.value)}
+									/>
+									<Button 
+										onClick={(e) => handleSubmit("newTask", e, aColl['_id'])}
+										variant="outline-secondary" 
+										id="button-addon2"> 
+											Add 
+									</Button>
+								</InputGroup>	
 								</ListGroup>
 							</Card>
 						</div>
