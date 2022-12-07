@@ -1,0 +1,76 @@
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1200px; /* 设置modal的宽度 */
+    height: 800px; /* 设置modal的高度 */
+    z-index: 10; /* 设置modal的层级，使其在其他内容之上 */
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 25px;
+}
+
+.title {
+    margin-top: 2.5%;
+    font-size: 50px;
+}
+
+.body {
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+    font-size: 30px;
+}
+
+.tag{
+    font-size: 20px;
+    width: 25%;
+    margin-left: 10px;
+}
+
+.description {
+    height: 200px;
+    width: 80%;
+}
+
+.session {
+    display: flex;
+}
+
+.duration {
+    font-size: 20px;
+    width: 15%;
+    margin-left: 10px;
+}
+
+
+.start_focus {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+.close_button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 25px;
+}
+
+.save_button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    font-size: 25px;
+}
+

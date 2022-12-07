@@ -4,7 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./HomeView.css";
 import axios from "axios";
 import userPic from "./assets/defaultUser.png";
-import Draggable, {DraggableCore} from 'react-draggable'; 
+import TaskModal from "./TaskModal";
+// import Draggable, {DraggableCore} from 'react-draggable'; 
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -14,6 +15,11 @@ console.log("port: " + port);
 
 
 function Home() {
+
+	/** ================================================================================
+	 * Hooks setup + value initialization
+	 *  ================================================================================
+	 */
 	let [allCollection, setAllCollection] = useState([]);
 	let [taskId_name, setTaskId_name] = useState(new Map()); //KEY: id, VALUE: name
 	let [newCollection, setNewCollection] = useState("");
@@ -21,13 +27,36 @@ function Home() {
 	let [newTaskInfo, setNewTaskInfo] = useState("");
 	let [collectionName, setCollectionName] = useState("");
 	let [success, setSuccess] = useState(false);
-	let [submitDone, setSubmitDone] = useState(true);
+	let [currentTask, setCurrentTask] = useState(null);
+	let [showModal, setShowModal] = useState(false);
+	// let [submitDone, setSubmitDone] = useState(true);
 	let [currInputFieldVal, setCurrInputFieldVal] = useState("");
+
 	const navigate = useNavigate(); 
+	var cardheight=1000;
+	const elementRef = useRef(null);  
 	
 	console.log(allCollection);
 	console.log(taskId_name);
 
+
+	/** ================================================================================
+	 *  Helper functions on Nav Bar:
+	 *  ================================================================================
+	 */
+	function logout() {
+		// Delete the token
+		localStorage.removeItem("token");
+		// Redirect to welcome page
+		window.location.href = "/";
+	}
+
+
+	/** ================================================================================
+	 *  useEffect
+	 *  fetch data at boot up:
+	 *  ================================================================================
+	 */
 	useEffect( () => {
 		var recvData;
 		// get collection from db
@@ -111,16 +140,11 @@ function Home() {
 		}
 	}, [])
 
-
-
-
-
-
-
-
-
-
-// background height - dynamically change based on scroll position
+	/** ================================================================================
+	 *  useEffect 
+	 *  background height - dynamically change based on scroll position
+	 *  ================================================================================
+	 */
 	const [scrollPosition, setScrollPosition] = useState(920);
 	const handleScroll = () => {
 		const position = window.pageYOffset;
@@ -133,13 +157,11 @@ function Home() {
 		};
 	}, []);
 
- 
-	var cardheight=1000;
-	const elementRef = useRef(null);  
-	// console.log("scrollPosition "+scrollPosition);
-
-
-// remap after new collection/task inserted
+	/** ================================================================================
+	 *  useEffect 
+	 *  remap after new collection/task inserted
+	 *  ================================================================================
+	 */
 	useEffect(() => { 
 		setAllCollection([...allCollection, newCollection]);
 	}, [newCollection]);
@@ -150,10 +172,12 @@ function Home() {
 	}, [newTaskInfo]);
 
 	
-
-// all interactions with backend 
+	/** ================================================================================
+	 *  Handler function: all interactions with backend 
+	 *  ================================================================================
+	 */  
 	const handleSubmit = async (operation, e, input_id) => {
-		setSubmitDone(false)
+		// setSubmitDone(false)
 		if(operation==="newCollection"){
 			if(e) e.preventDefault();
 
@@ -253,18 +277,12 @@ function Home() {
 						console.log(error); 
 					})
 
-					setSubmitDone(true)
-				// for(let i = 0; i < allCollection.length; i++) {
-				// 	if(allCollection[i]['_id']==input_id) {
-				// 		allCollection[i].allTasks.push(taskId)
-				// 		break;
-				// 	}
-				// }
+					// setSubmitDone(true)
 			})
 			.catch(function (error) {
 				console.log("===Task create FAILED==="); 
 				console.log(error); 
-				setSubmitDone(true)
+				// setSubmitDone(true)
 
 			})
 		}
@@ -275,12 +293,49 @@ function Home() {
 
 
 
+
+	/** ================================================================================
+	 *  Handler function to show modals
+	 *  ================================================================================
+	 */ 
+
+	// Due to the asynchronous nature of the axios get call, if I update the current task
+	// right within the function, it's not updated yet. Thus, it's null.
+	function handleClick(task) {
+		console.log("===in handleClick===")
+		axios.get(`http://localhost:8080/api/task/${task}`,{ headers: { "Access-Control-Allow-Origin": "*" }, })
+		.then(function(response) {
+			setCurrentTask(response.data.data);
+			console.log("===get task modal info success!==="+JSON.stringify(response.data.data))
+		})
+    }
+	function handleClose() {
+        setShowModal(false);
+    }
+	// If a user click save button to close a TaskModal, need to call a post request to save data.
+	function handleSave(task) {
+	}
+	// Only show the modal after the current task has been updated and is not null
+	useEffect(() => {
+		if (currentTask != null) {
+			setShowModal(true);
+		}
+	  }, [currentTask]);
+
+
+	/** ================================================================================
+	 *  Return
+	 *  ================================================================================
+	 */
 if (success === false) {
     return <>Still loading...</>;
 }
 return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
+	{showModal && (
+		<TaskModal onClose={handleClose} task={currentTask}/>
+	)}
 	<Row>
 {/* NAV BAR right */}
 		<Col xs={6} md={4} className="col-leftside-container">
@@ -298,7 +353,7 @@ return (
 							{/* <Nav.Link>Home</Nav.Link> */}
 						</Nav.Item>
 						<Nav.Item>
-							<Nav.Link eventKey="link-1">Logout</Nav.Link>
+							<Nav.Link eventKey="link-1" onClick={() => {logout()}}>Logout</Nav.Link>
 						</Nav.Item> 
 					</Nav> 
 				</div>
@@ -331,7 +386,7 @@ return (
 								{
 									 aColl && aColl.allTasks && aColl.allTasks.map((taskId) => (
 										<div key={taskId}> 
-											<ListGroup.Item eventKey={taskId}>
+											<ListGroup.Item eventKey={taskId} onClick={() => {handleClick(taskId)}}>
 												<div className="item-content" > 
 													<Form.Check 
 														type='checkbox'
