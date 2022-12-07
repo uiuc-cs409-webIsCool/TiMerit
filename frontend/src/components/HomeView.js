@@ -26,6 +26,7 @@ function Home() {
 	let [collectionName, setCollectionName] = useState("");
 	let [showModal, setShowModal] = useState(false);
 	const [scrollPosition, setScrollPosition] = useState(920);
+	let [success, setSuccess] = useState(false);
 
 	// Hardcoded values
 	var cardheight=1000;
@@ -118,9 +119,11 @@ function Home() {
 					}
 				}
 			}
+			setSuccess(true)
 		};
 
 		loadCollection()
+		
 	}, [])
 
 	// Only show the modal after the current task has been updated and is not null
@@ -203,6 +206,10 @@ function Home() {
 	 *  Return
 	 *  ================================================================================
 	 */
+
+	if (success === false) {
+		return <>Still loading...</>;
+	}
 
 return (
 	<div className="outer-container-div">
