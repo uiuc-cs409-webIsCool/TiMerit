@@ -8,6 +8,9 @@ import Draggable, {DraggableCore} from 'react-draggable';
 import jwt_decode from "jwt-decode";
 import { json } from "react-router-dom";
 import TaskModal from "./TaskModal";
+import { useNavigate } from "react-router-dom";
+import { Scrollbars } from 'react-custom-scrollbars';
+
 var port = process.env.PORT || 8080;
 // console.log("port: " + port);
 
@@ -15,9 +18,11 @@ var port = process.env.PORT || 8080;
 function Home() {
 	let [currentTask, setCurrentTask] = useState(null);
 	let [allCollection, setAllCollection] = useState([]);
+	let [taskId_name, setTaskId_name] = useState(new Map()); //KEY: id, VALUE: name
 	let [newCollection, setNewCollection] = useState("");
 	let [collectionName, setCollectionName] = useState("");
 	let [showModal, setShowModal] = useState(false);
+	const navigate = useNavigate() 
 	let [success, setSuccess] = useState(false);
 	let [fail, setFail] = useState(false);
 	
@@ -35,7 +40,7 @@ function Home() {
 	}
 
 	// Side effects:
-	useEffect(() => {
+	useEffect(() => {	
 		const token = localStorage.getItem("token");
 		if (token) {
 			// console.log(token);
@@ -43,12 +48,75 @@ function Home() {
 			// console.log(user);
 
 			if (!user) {
-				localStorage.removeItem("token");
-				window.location.href = "/";
+				localStorage.removeItem('token')
+				navigate.replace('/')
 			} else {
-				test();
-			}
+                // loadCollection()
+			} 
 		}
+
+		var recvData;
+		// get collection from db
+		const loadCollection = async ()=>{
+			await axios.get(
+				"http://localhost:" + port + "/api/collection",
+				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+			.then(function (response) {
+				console.log("===Collection Get success===");
+	
+				if (response.data.data) {
+					recvData = response.data.data;
+					setAllCollection(recvData)
+					// recvData.length>0 && recvData.map((coll)=>(
+					// 	setAllCollection(allCollection => [...allCollection, coll])
+					// ))
+	
+					console.log(recvData);
+					console.log(allCollection); 
+	
+					loadTask()
+				}
+				else {
+					console.log("===Collection get FAILED. not found response.data.data._id==="); 
+				}
+			})
+			.catch(function (error) {
+				console.log("===Collection get FAILED==="); 
+				console.log(error); 
+			})
+		};
+	
+		// get task from db for each collection
+		const loadTask = async ()=>{
+			console.log("===loadTask=== recvData len: "+recvData.length);
+			for (const coll of recvData){
+				for (const taskId of coll.allTasks){
+					try{
+						const response = await axios.get(
+							"http://localhost:" + port + "/api/task/"+taskId,
+							{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+
+						if(response){
+							if (response.data.data) {
+								console.log("===Task Get success===taskId: "+taskId); 
+								const taskName = response.data.data.name;
+								setTaskId_name(taskId_name.set(taskId, taskName));
+							}
+							else {
+								console.log("===Task get FAILED==="); 
+							}
+						}
+					} catch(error){
+						console.log("===Task get FAILED==="); 
+						console.log(error); 
+					}
+				}
+			}
+			setSuccess(true)
+			console.log("===!!!!Task get FINISHED!!!!==="); 
+		};
+
+		loadCollection()
 	}, [])
 
 	/**
@@ -87,21 +155,15 @@ function Home() {
 			"http://localhost:" + port + "/api/collection",
 			{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 		.then(function (response) {
+			if (response) {
 			// console.log("===Collection Get success===");
-
-			if (response.data.data) {
-				const recvData = response.data.data;
-				setAllCollection(recvData)
-
 				// console.log(recvData);
 				// console.log(allCollection);
-
 				setSuccess(true);
 				setTimeout(() => {
 					setSuccess(false);
 				}, 3000);
-			}
-			else {
+			} else {
 				console.log("===Collection get FAILED. not found response.data.data._id==="); 
 			}
 		})
@@ -128,15 +190,10 @@ function Home() {
 		};
 	}, []);
 
-
-// Card height - dynamically change based on maximum height card
-	const [cardheight, setCardHeight] = useState(0);
-	const elementRef = useRef(null); 
-	useEffect(() => {
-		if(elementRef.current) 
-			setCardHeight(elementRef.current.clientHeight);
-	}, []); 
-	// console.log("scrollPosition "+scrollPosition+". allCollection.length="+allCollection.length);
+ 
+	var cardheight=1000;
+	const elementRef = useRef(null);  
+	// console.log("scrollPosition "+scrollPosition);
 
 
 // remap after new collection inserted
@@ -155,13 +212,7 @@ function Home() {
 			.then(function (response) {
 				// console.log("===Collection create success==="+JSON.stringify(response.data.data)); 
 				if (response.data.data._id) {
-					setNewCollection(response.data.data);
-					// setAllCollection(allCollection=>[...allCollection, response.data.data._id]);
-
-					setSuccess(true);
-					setTimeout(() => {
-						setSuccess(false);
-					}, 3000);
+					setNewCollection(response.data.data); 
 				}
 				else {
 					console.log("===Collection create FAILED. not found response.data.data._id==="); 
@@ -169,11 +220,7 @@ function Home() {
 			})
 			.catch(function (error) {
 				console.log("===Collection create FAILED==="); 
-				console.log(error);
-				setFail(true);
-				setTimeout(() => {
-					setFail(false);
-				}, 3000);
+				console.log(error); 
 			})
 		}; 
 		if(e) e.preventDefault();
@@ -181,8 +228,11 @@ function Home() {
 	const onFormSubmit = (e) => e.preventDefault();  
 
 
-	
 
+
+if (success === false) {
+    return <>Still loading...</>;
+}
 return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
@@ -232,21 +282,22 @@ return (
 				// Check if allCollection is empty. If not iterate through the collection, and create <Col/> for each item.
 				allCollection.length>0 && allCollection.map((aColl, idx) => (
 					<Col lg className="mainContent-card" ref={elementRef}>
-						<Draggable grid={[100, 100]} handle="strong">
 						<div className="box no-cursor">
 							<Card style={{ width: '14rem' }}> 
-								<Card.Header> <strong className="cursor"><div>Drag here</div></strong> </Card.Header>
 								<Card.Title className="mainContent-card-title">{aColl['name']}</Card.Title>
-								<ListGroup variant="flush">
+								<ListGroup variant="flush" className="mainContent-taskList">
+								<Scrollbars style={{ height: 300 }}>
 								{
-									aColl && aColl.allTasks && aColl.allTasks.map((task) => (
-										<ListGroup.Item eventKey={task} onClick={() => {handleClick(task)}}>task id is: {task}</ListGroup.Item>
+									aColl && aColl.allTasks && aColl.allTasks.map((taskId) => (
+										<ListGroup.Item eventKey={taskId} onClick={() => {handleClick(taskId)}}>
+											{taskId_name.get(taskId)}
+										</ListGroup.Item>
 									))
-								}
+								}								
+								</Scrollbars>
 								</ListGroup>
 							</Card>
 						</div>
-						</Draggable>
 					</Col>
 				))
 			}
