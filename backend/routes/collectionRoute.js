@@ -82,6 +82,30 @@ module.exports = (router) => {
         }
     });
 
+    //////////////////////////////GET:id//////////////////////////////////
+    collectionRouteID.get(async (req, res) => {
+        console.log('===in get:id Collection===');
+        console.log("! req.body: "+JSON.stringify(req.body));
+        console.log("! req.params: "+JSON.stringify(req.params));
+        
+        let id = req.params.id;
+        const foundColl=await collectionModel.findOne({ '_id': id }) 
+
+        if(foundColl) {
+            res.status(200).json({
+                message: "Status: Get Success",
+                data: foundColl
+            });
+        }
+        else {
+            let err = new Error('Status: Locate Collection Failed. Given collection ID not found');
+            err.code = 404;
+            next(err); 
+            return;
+        }
+    });
+
+
     //////////////////////////DELETE/////////////////////////
     collectionRouteID.delete(async(req, res, next)=>{
         console.log('===in deleteCollection /:id===');
