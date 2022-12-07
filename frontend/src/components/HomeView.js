@@ -54,14 +54,20 @@ function Home() {
 	/**
 	 * Handler function to show modals
 	 */
+	// Due to the asynchronous nature of the axios get call, if I update the current task
+	// right within the function, it's not updated yet. Thus, it's null.
 	function handleClick(task) {
-        setShowModal(true);
 		axios.get(`http://localhost:8080/api/task/${task}`,{ headers: { "Access-Control-Allow-Origin": "*" }, })
 		.then(function(response) {
 			setCurrentTask(response.data.data);
-			console.log(response.data.data);
 		})
     }
+	// Only show the modal after the current task has been updated and is not null
+	useEffect(() => {
+		if (currentTask != null) {
+			setShowModal(true);
+		}
+	  }, [currentTask]);
 
     function handleClose() {
         setShowModal(false);

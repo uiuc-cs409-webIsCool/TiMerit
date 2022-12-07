@@ -5,6 +5,9 @@ import axios from "axios";
 
 
 function TaskModal({onClose, task})  {
+    const [currentTask, setCurrentTast] = useState(null);
+
+    console.log(task);
     return (
         <div className={styles.modal}>
             <div className={styles.modal_header} style={{ textAlign: 'center' }}>
@@ -17,6 +20,7 @@ function TaskModal({onClose, task})  {
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                     Sed lacus felis, fringilla vitae est non, vulputate imperdiet odio. 
                     Ut ultrices tristique nulla, a varius erat condimentum in. Etiam quis viverra elit.
+                    {/* {task._id} */}
                 </p>
             </div>
         </div>
