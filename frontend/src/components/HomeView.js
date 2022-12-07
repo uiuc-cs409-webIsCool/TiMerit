@@ -29,15 +29,15 @@ function Home() {
 	let [success, setSuccess] = useState(false);
 	let [currentTask, setCurrentTask] = useState(null);
 	let [showModal, setShowModal] = useState(false);
-	// let [submitDone, setSubmitDone] = useState(true);
+	let [submitDone, setSubmitDone] = useState(true);
 	let [currInputFieldVal, setCurrInputFieldVal] = useState("");
 
 	const navigate = useNavigate(); 
 	var cardheight=1000;
 	const elementRef = useRef(null);  
 	
-	console.log(allCollection);
-	console.log(taskId_name);
+	// console.log(allCollection);
+	// console.log(taskId_name);
 
 
 	/** ================================================================================
@@ -177,7 +177,6 @@ function Home() {
 	 *  ================================================================================
 	 */  
 	const handleSubmit = async (operation, e, input_id) => {
-		// setSubmitDone(false)
 		if(operation==="newCollection"){
 			if(e) e.preventDefault();
 
@@ -221,6 +220,7 @@ function Home() {
 			})
 		}
 		else if(operation==="newTask"){
+			setSubmitDone(false)
 			const taskName = currInputFieldVal;
 			const token = localStorage.getItem('token');
 			const user_raw = jwt_decode(token);
@@ -277,16 +277,15 @@ function Home() {
 						console.log(error); 
 					})
 
-					// setSubmitDone(true)
+					setSubmitDone(true)
 			})
 			.catch(function (error) {
 				console.log("===Task create FAILED==="); 
 				console.log(error); 
-				// setSubmitDone(true)
+				setSubmitDone(true)
 
 			})
 		}
-		// setSubmitDone(true)
 	};
 	const onFormSubmit = (e) => e.preventDefault();  
 
@@ -385,19 +384,24 @@ return (
 								<Scrollbars style={{ height: 260 }} className="mainContent-scrollbar">
 								{
 									 aColl && aColl.allTasks && aColl.allTasks.map((taskId) => (
-										<div key={taskId}> 
-											<ListGroup.Item eventKey={taskId} onClick={() => {handleClick(taskId)}}>
-												<div className="item-content" > 
-													<Form.Check 
-														type='checkbox'
-														defaultChecked = {taskId_name.get(taskId).completed}
-														className='default-checkbox'
-														onClick={(e) => handleSubmit("completeTask", e, taskId)}
-														label = {taskId_name.get(taskId).name}
-														>
-													</Form.Check>
-												</div>
-											</ListGroup.Item> 
+											<div key={taskId}> 
+												<ListGroup.Item eventKey={taskId} onClick={() => {handleClick(taskId)}}>
+													<div className="item-content" > 
+														<Form.Check 
+															type='checkbox'
+															// defaultChecked = {taskId_name.get(taskId).completed}
+															className='default-checkbox'
+															// onClick={(e) => handleSubmit("completeTask", e, taskId)}
+															// label = {taskId_name.get(taskId).name}
+															>
+															<Form.Check.Input 
+																type='checkbox' 
+																defaultChecked = {taskId_name.get(taskId).completed}
+																onClick={(e) => handleSubmit("completeTask", e, taskId)}/>
+															<Form.Check.Label type='checkbox'>{taskId_name.get(taskId).name}</Form.Check.Label>
+														</Form.Check>
+													</div>
+												</ListGroup.Item> 
 											</div>	
 									))
 								}				
@@ -405,7 +409,7 @@ return (
 								<InputGroup className="mainContent-addNewTask-inputGroup">
 									<Form.Control
 										placeholder="Enter a task..." 
-										onChange={(e) => setCurrInputFieldVal(e.target.value)}
+										onChange={(e) => setCurrInputFieldVal(e.target.value)} 
 									/>
 									<Button 
 										onClick={(e) => handleSubmit("newTask", e, aColl['_id'])}
