@@ -69,7 +69,7 @@ function Welcome() {
             )}
             
             <div className={styles.login}>
-                <img src={logo} alt="logo" className={styles.logo} onClick={handleClick}/>
+                <img src={logo} alt="logo" className={styles.logo}/>
                 <Form className={styles.login_form}>
                     <Row>
                         <Col>

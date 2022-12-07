@@ -15,15 +15,21 @@ var port = process.env.PORT || 8080;
 
 
 function Home() {
+	/** ================================================================================
+	 * Hooks setup
+	 *  ================================================================================
+	 */
 	let [currentTask, setCurrentTask] = useState(null);
 	let [allCollection, setAllCollection] = useState([]);
 	let [taskId_name, setTaskId_name] = useState(new Map()); //KEY: id, VALUE: name
 	let [newCollection, setNewCollection] = useState("");
 	let [collectionName, setCollectionName] = useState("");
 	let [showModal, setShowModal] = useState(false);
-	const navigate = useNavigate() 
-	let [success, setSuccess] = useState(false);
-	let [fail, setFail] = useState(false);
+	const [scrollPosition, setScrollPosition] = useState(920);
+
+	// Hardcoded values
+	var cardheight=1000;
+	const elementRef = useRef(null);  
 	
 
 
@@ -38,18 +44,31 @@ function Home() {
 		// console.log(data);
 	}
 
-	// Side effects:
+
+
+	/** ================================================================================
+	 *  Helper functions:
+	 *  ================================================================================
+	 */
+	function logout() {
+		// Delete the token
+		localStorage.removeItem("token");
+		// Redirect to welcome page
+		window.location.href = "/";
+	}
+
+
+
+	/** ================================================================================
+	 *  Side effects:
+	 *  ================================================================================
+	 */
 	useEffect(() => {	
 		const token = localStorage.getItem("token");
 		if (token) {
 			const user = jwt_decode(token);
-
-			if (!user) {
-				localStorage.removeItem('token')
-				navigate.replace('/')
-			} else {
-                // loadCollection()
-			} 
+		} else {
+			window.location.href = "/";
 		}
 
 		var recvData;
@@ -63,10 +82,6 @@ function Home() {
 				if (response.data.data) {
 					recvData = response.data.data;
 					setAllCollection(recvData)
-					// recvData.length>0 && recvData.map((coll)=>(
-					// 	setAllCollection(allCollection => [...allCollection, coll])
-					// ))
-	
 					loadTask()
 				}
 				else {
@@ -103,15 +118,37 @@ function Home() {
 					}
 				}
 			}
-			setSuccess(true)
 		};
 
 		loadCollection()
 	}, [])
 
-	/**
-	 * Handler function to show modals
-	 */
+	// Only show the modal after the current task has been updated and is not null
+	useEffect(() => {
+		if (currentTask != null) {
+			setShowModal(true);
+		}
+	  }, [currentTask]);
+	
+	// Add scroll event
+	useEffect(() => {
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
+
+	// remap after new collection inserted
+	useEffect(() => { 
+		setAllCollection([...allCollection, newCollection]);
+	}, [newCollection]);
+
+
+
+	/** ================================================================================
+	 *  Handler function to show modals
+	 *  ================================================================================
+	 */ 
 
 	// Due to the asynchronous nature of the axios get call, if I update the current task
 	// right within the function, it's not updated yet. Thus, it's null.
@@ -121,12 +158,6 @@ function Home() {
 			setCurrentTask(response.data.data);
 		})
     }
-	// Only show the modal after the current task has been updated and is not null
-	useEffect(() => {
-		if (currentTask != null) {
-			setShowModal(true);
-		}
-	  }, [currentTask]);
 
     function handleClose() {
         setShowModal(false);
@@ -137,32 +168,11 @@ function Home() {
 
 	}
 
-
-
-// background height - dynamically change based on scroll position
-	const [scrollPosition, setScrollPosition] = useState(920);
+	// background height - dynamically change based on scroll position	
 	const handleScroll = () => {
 		const position = window.pageYOffset;
 		setScrollPosition(position + 920);
 	};
-	useEffect(() => {
-		window.addEventListener('scroll', handleScroll, { passive: true });
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		};
-	}, []);
-
- 
-	var cardheight=1000;
-	const elementRef = useRef(null);  
-	// console.log("scrollPosition "+scrollPosition);
-
-
-// remap after new collection inserted
-	useEffect(() => { 
-		setAllCollection([...allCollection, newCollection]);
-	}, [newCollection]);
-
 
 	const handleSubmit = (operation, e) => {
 		if(operation==="newCollection"){
@@ -188,6 +198,12 @@ function Home() {
 	const onFormSubmit = (e) => e.preventDefault();  
 
 
+
+	/** ================================================================================
+	 *  Return
+	 *  ================================================================================
+	 */
+
 return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
@@ -211,7 +227,7 @@ return (
 							{/* <Nav.Link>Home</Nav.Link> */}
 						</Nav.Item>
 						<Nav.Item>
-							<Nav.Link eventKey="link-1">Logout</Nav.Link>
+							<Nav.Link eventKey="link-1" onClick={() => {logout()}}>Logout</Nav.Link>
 						</Nav.Item> 
 					</Nav> 
 				</div>
