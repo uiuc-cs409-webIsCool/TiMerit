@@ -385,21 +385,21 @@ return (
 								{
 									 aColl && aColl.allTasks && aColl.allTasks.map((taskId) => (
 											<div key={taskId}> 
-												<ListGroup.Item eventKey={taskId} onClick={() => {handleClick(taskId)}}>
-													<div className="item-content" > 
-														<Form.Check 
-															type='checkbox'
-															// defaultChecked = {taskId_name.get(taskId).completed}
-															className='default-checkbox'
-															// onClick={(e) => handleSubmit("completeTask", e, taskId)}
-															// label = {taskId_name.get(taskId).name}
-															>
-															<Form.Check.Input 
-																type='checkbox' 
-																defaultChecked = {taskId_name.get(taskId).completed}
-																onClick={(e) => handleSubmit("completeTask", e, taskId)}/>
-															<Form.Check.Label type='checkbox'>{taskId_name.get(taskId).name}</Form.Check.Label>
-														</Form.Check>
+												<ListGroup.Item eventKey={taskId} >
+													<div className="item-content" >  
+														<Container><Row>
+															<Col xs lg="2">
+																<Form.Check.Input 
+																	type='checkbox' 
+																	defaultChecked = {taskId_name.get(taskId).completed}
+																	onClick={(e) => handleSubmit("completeTask", e, taskId)}/>
+															</Col>
+															<Col>
+																<div inline onClick={() => {handleClick(taskId)}}>
+																	{taskId_name.get(taskId).name}
+																</div>
+															</Col>
+														</Row></Container> 
 													</div>
 												</ListGroup.Item> 
 											</div>	
