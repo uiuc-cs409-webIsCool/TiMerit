@@ -54,6 +54,7 @@ function Home() {
 	/**
 	 * Handler function to show modals
 	 */
+
 	// Due to the asynchronous nature of the axios get call, if I update the current task
 	// right within the function, it's not updated yet. Thus, it's null.
 	function handleClick(task) {
@@ -72,6 +73,11 @@ function Home() {
     function handleClose() {
         setShowModal(false);
     }
+
+	// If a user click save button to close a TaskModal, need to call a post request to save data.
+	function handleSave(task) {
+
+	}
 
 
 
