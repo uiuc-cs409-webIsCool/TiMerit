@@ -21,3 +21,9 @@
 2. DELETE by ID - input an ID, delete it if found
 3. POST - create new collection
 4. PUT - modify name field
+
+## TODO
+- [x] default PLUS sign to add new collection
+- [x] display all exisitng collection
+- [ ] have a PLUS sign inside collection to add new task
+- [ ] display all existing tasks of a collection

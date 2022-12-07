@@ -5,6 +5,36 @@ body{
     margin: auto auto;
     width: 50%;
 }
+.plus-addNewCollection{
+    border-width: 0;
+}
+
+/* draggable */
+.react-draggable, .cursor {
+    cursor: move;
+}
+.no-cursor {
+    cursor: auto;
+}
+.box {
+    /* background: #fff; */
+    /* border: 1px solid #999; */
+    border-radius: 3px;
+    width: 180px;
+    height: 180px;
+    margin: 10px;
+    padding: 10px;
+    float: left;
+}
+.react-draggable strong {
+    background: #ddd;
+    /* border: 1px solid #999; */
+    border-radius: 3px;
+    display: block;
+    /* margin-bottom: 10px; */
+    padding: 3px 5px;
+    text-align: center;
+}
 
 
 
@@ -73,26 +103,22 @@ body{
     border-radius: 10px;
     border-style: solid;
 
-    height: 100vh;
+    height: 100%;
+    margin-bottom: 20px;
 }
 
 .mainContent-container{
     margin: 30px;
 }
 
-
-/* Let blocks can be put in horizontal direction */
-.block-group {
+.mainContent-card{
+    margin-bottom: 20px;
+}
+.mainContent-plussign{
     display: flex;
-  }
-/* Let each block occupies the full size of a row, and adjust when the width changes */
-.block {
-  width: 200px;
-  height: 100px;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px;
-  flex: 1;
+    margin-left: 10px;
+}
+.mainContent-card-title{
+    text-align: center;
+    margin: 10px auto;
 }

@@ -46,7 +46,8 @@ module.exports = (router) => {
             });
 
             //after task created, add taskID to given collectionID
-            await collectionController.addTask(req.body.assignedCollection, doc._id);
+            let collID = req.body.assignedCollection ? req.body.assignedCollection: uncategorizedCollection_id;
+            await collectionController.addTask(collID, doc._id);
 
             //after task created, add taskID to given tagID
             // await tagController.addTask(req.body.tag, doc._id);
@@ -131,6 +132,40 @@ module.exports = (router) => {
         }
         else {
             next;
+        }
+    });
+
+    //////////////////////////////GET:id//////////////////////////////////
+    taskRouteID.get(async (req, res, next) => {
+        console.log('===in get:idTask===');
+        console.log("! req.body: "+JSON.stringify(req.body));
+        console.log("! req.params: "+JSON.stringify(req.params));
+        
+        let id = req.params.id;
+        const foundTask=await taskModel.findOne({ '_id': id })
+            // .then(result =>{
+            //     console.log("! get task: "+foundTask);
+            //     if(result)
+            //     res.status(200).json({
+            //         message: "Status: Delete Success",
+            //         data: result
+            //     });
+            // }).catch((err)=>{
+            //     err.message = "404 Cannot locate task based on id: " + id;
+            //     next(err);
+            // });  
+
+        if(foundTask) {
+            res.status(200).json({
+                message: "Status: Get Success",
+                data: foundTask
+            });
+        }
+        else {
+            let err = new Error('Status: Locate Task Failed. Given task ID not found');
+            err.code = 404;
+            next(err); 
+            return;
         }
     });
 

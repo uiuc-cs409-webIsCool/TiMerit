@@ -9,25 +9,6 @@ var collectionModel = mongoose.model('collection');
 
 var uncategorizedCollection_id;
 
-const privateMethods = {
-    isUncategorizedExist: async()=>{
-        return (await findUncategorizedId()) ? true : false;
-    },
-
-    createUncategorizedAndFindId: async()=>{
-        const newCollection = mongoose.model('Uncategorized', collectionModel); 
-        console.log(newCollection)
-    },
-
-    findUncategorizedId: async()=>{
-        let doc = await collectionModel.findOne(
-            {"name": "Uncategorized"}
-        )
-        console.log("! findUncategorizedId return id: "+doc._id);
-        return doc._id;
-    }
-}
-
 const collectionController = {
     /**
      * find collection from collID, remove task of taskID from alltask[]
@@ -46,7 +27,7 @@ const collectionController = {
  
 
     /**
-     * update the pendingTasks[] by inserting one task 
+     * update the allTasks[] by inserting one task 
      * @param collectionId The collection ID that is the object to update
      * @param taskID The task ID that will be pushed to coll's allTasks[]
      */

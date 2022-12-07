@@ -1,9 +1,15 @@
-import { Button, Card, Nav, Col, Row, Container } from "react-bootstrap";
+import { Button, Card, Nav, Col, Row, Container, ListGroup, Form } from "react-bootstrap";
+import { React, useState, useRef, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./HomeView.css";
+import axios from "axios";
 import userPic from "./assets/defaultUser.png";
-import { useEffect, useState } from "react";
+import Draggable, {DraggableCore} from 'react-draggable'; 
 import jwt_decode from "jwt-decode";
-import Block from "./Block";
+import { json } from "react-router-dom";
+var port = process.env.PORT || 8080;
+console.log("port: " + port);
+
 
 function Home() {
 	// Define Hooks:
@@ -112,14 +118,120 @@ function Home() {
 	// groupedBlocks is an array of arrays. [[Block1, Block2], [[Block3, Block4]].
 
 
+	let [allCollection, setAllCollection] = useState([]);
+	let [newCollection, setNewCollection] = useState("");
+	let [collectionName, setCollectionName] = useState("");
+	let [success, setSuccess] = useState(false);
+	let [fail, setFail] = useState(false);
+	
+	
+	// get collection from db
+	useEffect(()=>{
+		axios.get(
+			"http://localhost:" + port + "/api/collection",
+			{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+		.then(function (response) {
+			console.log("===Collection Get success===");
+
+			if (response.data.data) {
+				const recvData = response.data.data;
+				setAllCollection(recvData)
+
+				console.log(recvData);
+				console.log(allCollection);
+
+				setSuccess(true);
+				setTimeout(() => {
+					setSuccess(false);
+				}, 3000);
+			}
+			else {
+				console.log("===Collection get FAILED. not found response.data.data._id==="); 
+			}
+		})
+		.catch(function (error) {
+			console.log("===Collection get FAILED==="); 
+			console.log(error);
+			setFail(true);
+			setTimeout(() => {
+				setFail(false);
+			}, 3000);
+		})
+	} ,[]);
+
+// background height - dynamically change based on scroll position
+	const [scrollPosition, setScrollPosition] = useState(920);
+	const handleScroll = () => {
+		const position = window.pageYOffset;
+		setScrollPosition(position + 920);
+	};
+	useEffect(() => {
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
 
 
-  return (
+// Card height - dynamically change based on maximum height card
+	const [cardheight, setCardHeight] = useState(0);
+	const elementRef = useRef(null); 
+	useEffect(() => {
+		if(elementRef.current) 
+			setCardHeight(elementRef.current.clientHeight);
+	}, []); 
+	console.log("scrollPosition "+scrollPosition+". allCollection.length="+allCollection.length);
+
+
+// remap after new collection inserted
+	useEffect(() => { 
+		setAllCollection([...allCollection, newCollection]);
+	}, [newCollection]);
+
+
+	const handleSubmit = (operation, e) => {
+		if(operation==="newCollection"){
+			console.log("handleSubmit: newCollection");
+			axios.post(
+				"http://localhost:" + port + "/api/collection",
+				{ name: collectionName },
+				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+			.then(function (response) {
+				console.log("===Collection create success==="+JSON.stringify(response.data.data)); 
+				if (response.data.data._id) {
+					setNewCollection(response.data.data);
+					// setAllCollection(allCollection=>[...allCollection, response.data.data._id]);
+
+					setSuccess(true);
+					setTimeout(() => {
+						setSuccess(false);
+					}, 3000);
+				}
+				else {
+					console.log("===Collection create FAILED. not found response.data.data._id==="); 
+				}
+			})
+			.catch(function (error) {
+				console.log("===Collection create FAILED==="); 
+				console.log(error);
+				setFail(true);
+				setTimeout(() => {
+					setFail(false);
+				}, 3000);
+			})
+		}; 
+		if(e) e.preventDefault();
+	};
+	const onFormSubmit = (e) => e.preventDefault();  
+
+
+	
+
+return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
 	<Row>
-		{/*  xs={6} means that on a smartphone-sized screen, the component will occupy 6/12 of the container's width, 
-		while md={4} means that on a tablet-sized screen, the component will occupy 4/12 of the container's width.*/}
+{/* NAV BAR right */}
 		<Col xs={6} md={4} className="col-leftside-container">
 			<Row className="to-center" id="row-leftside-container">
 				<div className="userPic-container">
@@ -142,57 +254,48 @@ function Home() {
 			</Row>
 		</Col>
 
-		<Col xs={12} md={8}>
-			{groupedBlocks.map((blockGroup, index) => (
-				<div key={index} className="block-group">
-					{blockGroup.map((block) => (
-						<Block
-						    draggable						
-							id={block.id}
-							content={block.content}
-							onDragStart={handleDragStart}
-							onDragOver={handleDragOver}
-							onDrop={handleDrop}
-						/>
-					))}
-				</div>
-			))}
-			{/* <div className="mainContent-div">
-				<div className="testBlock-todelete">
-					<p>test block 1</p>
-					<p>test block 2</p>
-				</div>
+{/* MAIN CONTENT left */}
+		<Col xs={12} md={8}> <form className="login-card" onSubmit={onFormSubmit}>
+			<div className="mainContent-div" style={{height:scrollPosition}}> <Container className="mainContent-container">
+{/* + sign to add new collection */}
+			<Row sm>  
+				<Card className="plus-addNewCollection" style={{ width: '40rem' }}>
+					<Card.Body className="mainContent-plussign">  
+						<Form.Control style={{ width: '20rem' }} name="collectionName" type="text" placeholder="Enter Your New Collectipn Name"
+							onChange={(e) => setCollectionName(e.target.value)} />
+						<Button className="mainContent-plussign" variant="primary" onClick={(e) => handleSubmit("newCollection", e)}>+</Button>
+					</Card.Body>
+				</Card>
+			</Row>
 
-				<Container className="mainContent-container">
-					<Row>
-						<Col sm>
-							<Card style={{ width: '18rem' }}>
-								<Card.Body>
-									<Card.Title>Card Title</Card.Title>
-									<Card.Text>
-									Some quick example text to build on the card title and make up the
-									bulk of the card's content.
-									</Card.Text>
-									<Button variant="primary">Go somewhere</Button>
-								</Card.Body>
+			<Row lg={2} style={{height: cardheight}}>
+			{ //Array.from({ length: 0 })
+				allCollection.length>0 && allCollection.map((aColl, idx) => (
+					<Col lg className="mainContent-card" ref={elementRef}>
+						<Draggable grid={[100, 100]} handle="strong">
+						<div className="box no-cursor">
+							<Card style={{ width: '14rem' }}> 
+								<Card.Header> <strong className="cursor"><div>Drag here</div></strong> </Card.Header>
+								<Card.Title className="mainContent-card-title">{aColl['name']}</Card.Title>
+								<ListGroup variant="flush">
+								{
+									aColl && aColl.allTasks && aColl.allTasks.map((task) => (
+										<ListGroup.Item eventKey={task}>task id is: {task}</ListGroup.Item>
+									))
+								}
+								</ListGroup>
 							</Card>
-						</Col>
-						<Col sm>
-							<Card style={{ width: '18rem' }}>
-								<Card.Body>
-									<Card.Title>Card Title</Card.Title>
-									<Card.Text>
-									Some quick example text to build on the card title and make up the
-									bulk of the card's content.
-									</Card.Text>
-									<Button variant="primary">Go somewhere</Button>
-								</Card.Body>
-							</Card>
-						</Col>
-					</Row> 
-				</Container>
-			</div> */}
-		</Col>
+						</div>
+						</Draggable>
+					</Col>
+				))
+			}
+
+
+			</Row> 
+			</Container>  </div>
+		</form></Col>
+		
 	</Row>
 	</Container>
 	</div>
