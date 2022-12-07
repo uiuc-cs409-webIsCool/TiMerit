@@ -1,5 +1,3 @@
-[toc]
-
 # Schema Definition
 
 ### Collection schema
