@@ -3,9 +3,16 @@ import ReactDOM from'react-dom';
 import styles from "./TaskModal.module.css";
 import axios from "axios";
 
+import { Button, Col, Row, Form } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 function TaskModal({onClose, task})  {
     const [currentTask, setCurrentTast] = useState(null);
+    const [sessionDuration, setSessionDuration] = useState(25);
+    const [description, setDescription] = useState(null);
+    const [tag, setTag] = useState(null);
+
 
     console.log(task);
     return (
@@ -14,15 +21,48 @@ function TaskModal({onClose, task})  {
                 <span className={styles.close_button} onClick={onClose} >
                     &times;
                 </span>
-                <h2>{task.name}</h2>
+                <h1 className={styles.title}>{task.name}</h1>
+                <span className={styles.save_button} onClick={onClose} >
+                    &#10004;
+                </span>
             </div>
-            <div className="modal-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Sed lacus felis, fringilla vitae est non, vulputate imperdiet odio. 
-                    Ut ultrices tristique nulla, a varius erat condimentum in. Etiam quis viverra elit.
-                    {/* {task._id} */}
-                </p>
-            </div>
+
+            <Row className={styles.body}>
+                <Col>
+                    <Form.Group style={{"display": "flex"}}>
+                        <Form.Label>Tag:</Form.Label>
+                        <Form.Control
+                        value={tag}
+                        onChange={(e) => {setTag(e.target.value)}}
+                        className={styles.tag}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Description:</Form.Label>
+                        <Form.Control
+                        value={description}
+                        onChange={(e) => {setDescription(e.target.value)}}
+                        className={styles.description}
+                        />
+                    </Form.Group>
+                    <p>Date created: {task.date}</p>
+                    <Form.Group className={styles.session}>
+                        <Form.Label>Session Duration:</Form.Label>
+                        <Form.Control
+                        value={sessionDuration}
+                        onChange={(e) => {setSessionDuration(e.target.value)}}
+                        className={styles.duration}
+                        />
+                    </Form.Group>
+                    
+                </Col>
+
+                <Col style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <p>You have focused {} minutes for this task.</p>
+                    <Button className={styles.start_focus}>Start</Button>
+                </Col>
+
+            </Row>
         </div>
     )
 }
