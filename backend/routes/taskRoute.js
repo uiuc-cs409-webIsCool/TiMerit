@@ -58,64 +58,7 @@ module.exports = (router) => {
         })    
     });
 
-    //////////////////////////PUT/////////////////////////
-    taskRouteID.put(async(req, res, next)=>{
-        console.log('===in putTask===');
-        console.log("! req.body: "+JSON.stringify(req.body));
-        console.log("! req.params: "+JSON.stringify(req.params.id));
-
-
-        const id=req.params.id;
-        const name = req.body.name? (req.body.name): null;
-        var nameParam; if(name) nameParam=(name); console.log(nameParam);
-        
-        // const tag = req.body.tag? (req.body.tag): null;
-        // var tagParam; var oldTagId;
-        // if(tag) {
-        //     tagParam=(tag); 
-        //     console.log(tagParam);
-            
-        //     oldTagId = await taskController.getTagIDFromTaskID(id);
-        // }
-        const description = req.body.description? (req.body.description): null;
-        var descriptionParam; if(description) descriptionParam=toId(description); console.log(descriptionParam);
-
-        const assignedCollection = req.body.assignedCollection? (req.body.assignedCollection): null;
-        var assignedCollectionParam; if(assignedCollection) assignedCollectionParam=toId(assignedCollection); console.log(assignedCollectionParam);
-
- 
-        const doc = await taskModel.findOneAndUpdate(
-            { _id: id },
-            { 
-                name: nameParam,
-                // tag: tagParam,
-                description: descriptionParam,
-                assignedCollection: assignedCollectionParam
-            }, 
-            { new: true }
-        ).catch(next);
-        console.log("! after update: "+(doc)); 
-        
-        if(doc){
-            res.status(201).json({
-                message: "Status: Update Success",
-                data: doc
-            });
-
-            // if(tagParam){
-            //     //after task created, add taskID to given new tagID
-            //     await tagController.addTask(req.body.tag, doc._id);
-
-            //     //goto old tagID, delete taskID from alltask[]
-            //     await tagController.deleteTask(oldTagId, doc._id);
-            // }
-        }  
-        else{
-            let err = new Error('Status: Update Failed');
-            err.code = 404;
-            next(err); 
-        };    
-    });
+    
 
     //////////////////////////////GET//////////////////////////////////
     taskRoute.get(async (req, res) => {
@@ -203,6 +146,33 @@ module.exports = (router) => {
 
         //4 goto tagID, delete taskID from alltask[]
         // await tagController.deleteTask(tagId, toDeleteTaskID);
+    });
+    //////////////////////////UPDATE/////////////////////////
+    taskRouteID.put(async(req, res, next)=>{
+        console.log('===in putTask /:id===');
+        console.log("! req.body: "+JSON.stringify(req.body));
+        console.log("! req.params: "+JSON.stringify(req.params));
+        
+        //1 find update task CollID + save taskID
+        let toUpdateTaskID = req.params.id;
+        if( !(await taskController.isTaskIDExist(toUpdateTaskID)) ){
+            let err = new Error('Status: Delete Task Failed. Given task ID not found');
+            err.code = 404;
+            next(err); 
+            return;
+        }
+        //2 update a task
+        taskModel.findByIdAndUpdate(toUpdateTaskID,req.body, {
+            new: true,
+          })
+            .then(result =>{
+                console.log("result: "+result);
+                if(result)
+                res.status(200).json({
+                    message: "Status: update Success",
+                    data: result
+                });
+            }).catch(next);   
     });
 
 

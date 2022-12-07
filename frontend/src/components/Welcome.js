@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import styles from "./Welcome.module.css";
 import "bootstrap/dist/css/bootstrap.min.css"
+import { AiOutlineCheck } from "react-icons/ai";
 import {Form, Row, Col, Carousel} from 'react-bootstrap'
 
 import logo from "./assets/test.png"
@@ -13,6 +14,7 @@ import { Link } from "react-router-dom";
 function Welcome() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error,setError]=useState();
 
     /**
      * In frontend, create states to store value of input email and input password.
@@ -39,14 +41,13 @@ function Welcome() {
          * TODO: If password incorrect, throw a prompt to notice user.
          */
         if (data.user) {
-            alert("Log in!");
             // store token in local storage because we gonna be redrected to the homepage.
             localStorage.setItem("token", data.user);
 
             // Redirect user to the home page
             window.location.href = "/home";
         } else {
-            alert("Email or password is incorrect!");
+            setError('Invalid Username or Password');
             console.log("User name or password is incorrect.")
         }
     }
@@ -68,6 +69,7 @@ function Welcome() {
                         onChange={(e) => {setPassword(e.target.value)}}/>
                         </Col>
                         <Col><button type="button" className={styles.login_button} onClick={(e) => {login()}}>Log In</button></Col>
+                        <Col>{error?<label style={{ color: 'red'}}>{error}</label>:null} </Col>
                     </Row>
                 </Form>
             </div>
@@ -75,11 +77,15 @@ function Welcome() {
             <div className={styles.introduction}>
                 <div className={styles.text_intro}>
                     <div className={styles.intro_card}>
-                        <div class="card-body">
-                        <h1 class="intro-card-title">Timerit</h1>
-                        <p class="intro-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Sed lacus felis, fringilla vitae est non, vulputate imperdiet odio. 
-                        Ut ultrices tristique nulla, a varius erat condimentum in. Etiam quis viverra elit.
+                        <div className="card-body">
+                        <h1 className="intro-card-title">TiMerit</h1>
+                        <p className="intro-card-text">TiMerit is your effective & intuitive task manager app.
+                        <br />
+                        <AiOutlineCheck/> Add/Delete/Edit your own tasks within assigned collections.
+                        <br />
+                        <AiOutlineCheck/> Time analysis available for each task.
+                        <br />
+                        <AiOutlineCheck/> Customizable shortcuts for anything you want.
                         </p>
                     </div>
                 </div>
