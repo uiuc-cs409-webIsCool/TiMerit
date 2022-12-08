@@ -253,8 +253,14 @@ function Home() {
 				console.log("===Collection updateCollName success==="+JSON.stringify(response.data.data));
 				
 				//2 update local data
-				setAllCollection(allCollection.filter(aColl => aColl._id !== toUpdateCollId))
-				setNewCollection(response.data.data)
+				// setAllCollection(allCollection.filter(aColl => aColl._id !== toUpdateCollId))
+				// setNewCollection(response.data.data)
+				Object.values(allCollection).map(aColl => {
+					if(aColl._id === toUpdateCollId)
+						aColl.name = toUpdateCollName
+				})
+				console.log(allCollection)
+
 			})
 			.catch(function (error) {
 				console.log("===Collection updateCollName FAILED==="); 
