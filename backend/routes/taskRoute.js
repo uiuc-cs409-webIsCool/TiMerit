@@ -75,14 +75,6 @@ module.exports = (router) => {
         const duration = req.body.duration? (req.body.duration): null;
         var durationParam; if(duration) durationParam=(duration); console.log(durationParam);
 
-        // const tag = req.body.tag? (req.body.tag): null;
-        // var tagParam; var oldTagId;
-        // if(tag) {
-        //     tagParam=(tag); 
-        //     console.log(tagParam);
-            
-        //     oldTagId = await taskController.getTagIDFromTaskID(id);
-        // }
         const description = req.body.description? (req.body.description): null;
         var descriptionParam; if(description) descriptionParam=toId(description); console.log(descriptionParam);
 
@@ -124,6 +116,30 @@ module.exports = (router) => {
             next(err); 
         };    
     });
+
+    //////////////////////////POST:id/////////////////////////
+    taskRouteID.post((req, res) => {
+        const id = req.params.id;
+        console.log(req.body)
+        taskModel.findById(id, (err, task) => {
+            if (err) return res.status(500).json(err);
+            task.name = req.body.name;
+            
+            task.description = req.body.description;
+            task.duration = req.body.duration;
+            task.tag = req.body.tag;
+            // Prevent default
+            task.assignedCollection = req.body.assignedCollection;
+            
+            console.log(task)
+            task.save((err, updatedTask) => {
+                if (err) {
+                    console.log(err)
+                }
+                res.send(updatedTask);
+            })
+        })
+    })
 
     //////////////////////////////GET//////////////////////////////////
     taskRoute.get(async (req, res) => {
