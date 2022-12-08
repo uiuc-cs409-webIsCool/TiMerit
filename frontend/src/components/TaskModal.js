@@ -9,6 +9,7 @@ import { json } from "react-router-dom";
 var port = process.env.PORT || 8080;
 
 function TaskModal({onClose, task})  {
+    const [name, setName] = useState(task.name);
     const [sessionDuration, setSessionDuration] = useState(task.duration);
     const [description, setDescription] = useState(task.description);
     const [tag, setTag] = useState(task.tag);
@@ -21,7 +22,7 @@ function TaskModal({onClose, task})  {
                 "x-access-token": localStorage.getItem("token")
               },
             body: JSON.stringify({
-                name: task.name,
+                name: name,
                 duration: sessionDuration,
                 description: description,
                 tag: tag,
@@ -48,7 +49,10 @@ function TaskModal({onClose, task})  {
                 <span className={styles.close_button} onClick={onClose} >
                     &times;
                 </span>
-                <h1 className={styles.title}>{task.name}</h1>
+                <Form.Control 
+                value={name == null ? "" : name}
+                onChange={(e) => {setName(e.target.value)}}
+                className={styles.title}/>
                 <span className={styles.save_button} onClick={() => {onSave()}} >
                     &#10004;
                 </span>

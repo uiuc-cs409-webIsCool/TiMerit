@@ -120,15 +120,18 @@ module.exports = (router) => {
     //////////////////////////POST:id/////////////////////////
     taskRouteID.post((req, res) => {
         const id = req.params.id;
+        console.log(req.body)
         taskModel.findById(id, (err, task) => {
             if (err) return res.status(500).json(err);
             task.name = req.body.name;
+            
             task.description = req.body.description;
             task.duration = req.body.duration;
             task.tag = req.body.tag;
             // Prevent default
             task.assignedCollection = req.body.assignedCollection;
-
+            
+            console.log(task)
             task.save((err, updatedTask) => {
                 if (err) {
                     console.log(err)
