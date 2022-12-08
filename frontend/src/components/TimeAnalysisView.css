@@ -1,0 +1,23 @@
+.timeAnalysis-duration, .timeAnalysis-datepicker{
+    display: flex;
+    gap: 50px;
+    margin-bottom: 40px;
+} 
+
+.timeAnalysis-duration-inputfield{
+    display: flex;
+    flex-basis: 350px;
+}
+.timeAnalysis-container{
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: auto;
+}
+hr {
+    position: relative;
+    margin: 10px auto;
+    border: none;
+    height: 4px;
+    background: black;
+}
