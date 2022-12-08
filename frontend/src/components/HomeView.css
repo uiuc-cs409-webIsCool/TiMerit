@@ -145,3 +145,8 @@ body{
     margin-left: 1px;
     margin-top: 20px;
 }
+.mainContent-collNameInput{
+    border-width: 0;
+    text-align: center; 
+    font-weight: 450;
+}

@@ -231,6 +231,28 @@ function Home() {
 				console.log(error); 
 			})
 		}
+		else if(operation==="updateCollName"){
+			const toUpdateCollId = input_id[0] 
+			const toUpdateCollName = input_id[1] 
+			console.log("handleSubmit: updateCollName. toUpdateCollId: "+toUpdateCollId+". toUpdateCollName: "+toUpdateCollName);
+
+			//1 change data in db
+			axios.put(
+				"http://localhost:" + port + "/api/collection/"+toUpdateCollId,
+				{ name: toUpdateCollName },
+				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+			.then(function (response) {
+				console.log("===Collection updateCollName success==="+JSON.stringify(response.data.data));
+				
+				//2 update local data
+				setAllCollection(allCollection.filter(aColl => aColl._id !== toUpdateCollId))
+				setNewCollection(response.data.data)
+			})
+			.catch(function (error) {
+				console.log("===Collection updateCollName FAILED==="); 
+				console.log(error); 
+			})
+		}
 		else if(operation==="newTask"){
 			setSubmitDone(false)
 			const assignedCollectionId = input_id[0]
@@ -473,8 +495,14 @@ return (
 									{
 										aColl.name !== "Uncategorized" 
 										&& 
-											<Col md={{ span: 8, offset: 1 }}>
-												<div> {aColl['name']} </div>
+											<Col md={{ span: 8, offset: 1 }}> 
+												<div > 
+													<input className="mainContent-collNameInput" type="text" id="name" name="name" 
+														defaultValue={aColl['name']}  
+														onChange ={(e) => {}}
+														onKeyPress={(e) => (e.key == "Enter"&&handleSubmit("updateCollName", e, [aColl._id, e.target.value]))}
+													/>
+												</div>
 											</Col> 
 										|| 
 											<Col>
