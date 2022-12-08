@@ -18,8 +18,8 @@ const Timer = (props) => {
     //setTime(0);
     setIsActive(false);
     axios.put(
-        "http://localhost:" + port + "/api/task/" + props.taskid,
-        { duration: time },
+        "http://localhost:" + port + "/api/task/" + props.taskId,
+        { duration: Math.floor((time / 60) % 60) },
         { headers: { "Access-Control-Allow-Origin": "*" }, } )
     .then(response => {
         console.log(response);
