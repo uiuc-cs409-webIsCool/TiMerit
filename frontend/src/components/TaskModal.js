@@ -38,8 +38,9 @@ function TaskModal({onClose, task, update_name})  {
             console.log("ERROR")
             console.log(error);
         })
-
+        update_name(task._id, name);
         onClose();
+        
     }
 
     console.log(task);
