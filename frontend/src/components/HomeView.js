@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./HomeView.css";
 import axios from "axios";
 import userPic from "./assets/defaultUser.png";
+import trashPic from "./assets/trash-can-icon.png";
 import TaskModal from "./TaskModal";
 // import Draggable, {DraggableCore} from 'react-draggable'; 
 import jwt_decode from "jwt-decode";
@@ -200,19 +201,20 @@ function Home() {
 			})
 		}
 		else if(operation==="completeTask"){
-			const before = taskId_name.get(input_id).completed;
+			const completedTaskId = input_id[0]
+			const before = taskId_name.get(input_id[0]).completed;
 			const after = !before;
 			console.log("handleSubmit: completeTask. before: "+before+". after: "+after);
 			//1 change data in db
 			axios.put(
-				"http://localhost:" + port + "/api/task/"+input_id,
+				"http://localhost:" + port + "/api/task/"+completedTaskId,
 				{ completed: after.toString() },
 				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 			.then(function (response) {
 				console.log("===Task completeTask success==="+JSON.stringify(response.data.data));
 				
 				//2 refresh local data
-				taskId_name.get(input_id).completed = after
+				taskId_name.get(completedTaskId).completed = after
 			})
 			.catch(function (error) {
 				console.log("===Task completeTask FAILED==="); 
@@ -221,18 +223,19 @@ function Home() {
 		}
 		else if(operation==="newTask"){
 			setSubmitDone(false)
+			const assignedCollectionId = input_id[0]
 			const taskName = currInputFieldVal;
 			const token = localStorage.getItem('token');
 			const user_raw = jwt_decode(token);
 			const taskUser = user_raw.email;
-			console.log("handleSubmit: newTask. taskName: "+taskName+". taskUser: "+taskUser);
+			console.log("handleSubmit: newTask. taskName: "+taskName+". taskUser: "+taskUser+". assignedCollectionId: "+assignedCollectionId );
 			//1 change data in db
 			await axios.post(
 				"http://localhost:" + port + "/api/task",
 				{ 
 					name: taskName,
 					assignedUser: taskUser,
-					assignedCollection: input_id
+					assignedCollection: assignedCollectionId
 				},
 				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 			.then(async function (response) {
@@ -252,7 +255,59 @@ function Home() {
 
 				//3 insert new task to collection local data
 				await axios.get(
-					"http://localhost:" + port + "/api/collection/"+input_id,
+					"http://localhost:" + port + "/api/collection/"+assignedCollectionId,
+					{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+					.then(function (response) {
+			
+						if (response.data.data) {
+							const recvData = response.data.data; 
+							for(let i=0; i<allCollection.length; i++){
+								if(allCollection[i]._id==assignedCollectionId){
+									allCollection[i] = recvData
+									console.log("===Collection:id Get success=== recvData"+JSON.stringify(recvData));
+									console.log(allCollection)
+									break
+								}
+							}
+							
+						}
+						else {
+							console.log("===Collection:id get FAILED. not found response.data.data._id==="); 
+						}
+					})
+					.catch(function (error) {
+						console.log("===Collection:id get FAILED==="); 
+						console.log(error); 
+					})
+
+					setSubmitDone(true)
+			})
+			.catch(function (error) {
+				console.log("===Task create FAILED==="); 
+				console.log(error); 
+				setSubmitDone(true)
+
+			})
+		}
+		else if(operation==="deleteTask"){
+			setSubmitDone(false) 
+			const toDeleteTaskID = input_id[0]
+			const toDeleteTaskID_collId = input_id[1]
+			console.log("handleSubmit: deleteTask. taskId: "+toDeleteTaskID);
+
+			//1 change data in db
+			await axios.delete(
+				"http://localhost:" + port + "/api/task/"+toDeleteTaskID,
+				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+			.then(async function (response) {
+				console.log("===Task delete success==="+JSON.stringify(response.data.data));
+				
+				//2 refresh local data
+				if(!taskId_name.delete(toDeleteTaskID)) console.log("Task delete FAILED in map struct")
+
+				//3 insert new task to collection local data
+				await axios.get(
+					"http://localhost:" + port + "/api/collection/"+toDeleteTaskID_collId,
 					{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 					.then(function (response) {
 			
@@ -281,6 +336,30 @@ function Home() {
 			})
 			.catch(function (error) {
 				console.log("===Task create FAILED==="); 
+				console.log(error); 
+				setSubmitDone(true)
+
+			})
+		}
+		else if(operation==="deleteCollection"){
+			setSubmitDone(false) 
+			const toDeleteCollID = input_id[0]
+			console.log("handleSubmit: deleteCollection. collId: "+toDeleteCollID);
+
+			//1 change data in db
+			await axios.delete(
+				"http://localhost:" + port + "/api/collection/"+toDeleteCollID,
+				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+			.then(async function (response) {
+				console.log("===deleteCollection success==="+JSON.stringify(response.data.data));
+				
+				//2 refresh local data
+				setAllCollection((allCollection)=>allCollection.filter(aColl => aColl._id !== toDeleteCollID ))
+				
+				setSubmitDone(true)
+			})
+			.catch(function (error) {
+				console.log("===deleteCollection FAILED==="); 
 				console.log(error); 
 				setSubmitDone(true)
 
@@ -368,7 +447,7 @@ return (
 					<Card.Body className="mainContent-plussign">  
 						<Form.Control style={{ width: '20rem' }} name="collectionName" type="text" placeholder="Enter Your New Collectipn Name"
 							onChange={(e) => setCollectionName(e.target.value)} />
-						<Button className="mainContent-plussign" variant="primary" onClick={(e) => handleSubmit("newCollection", e, 0)}>+</Button>
+						<Button className="mainContent-plussign" variant="primary" onClick={(e) => handleSubmit("newCollection", e, [0])}>+</Button>
 					</Card.Body>
 				</Card>
 			</Row>
@@ -379,11 +458,23 @@ return (
 					<Col lg className="mainContent-card" ref={elementRef} >
 						<div className="box no-cursor">
 							<Card style={{ width: '14rem' }} > 
-								<Card.Title className="mainContent-card-title">{aColl['name']}</Card.Title> 
+								<Card.Title className="mainContent-card-title">
+									<Container> <Row style={{ width: '210px' }}>
+									<Col md={{ span: 8, offset: 1 }}>
+										<div> {aColl['name']} </div>
+									</Col>
+									<Col md={{ span: 1, offset: 1 }}>
+										<div onClick={(e)=>{handleSubmit("deleteCollection", e, [aColl._id])}}>
+											<img src={trashPic} alt="" style={{width:'15px'}}/>
+										</div>
+									</Col>
+									</Row></Container>
+								</Card.Title> 
 								<ListGroup variant="flush" className="mainContent-taskList" >
 								<Scrollbars style={{ height: 260 }} className="mainContent-scrollbar">
 								{
 									 aColl && aColl.allTasks && aColl.allTasks.map((taskId) => (
+										taskId_name.get(taskId) && 
 											<div key={taskId}> 
 												<ListGroup.Item eventKey={taskId} >
 													<div className="item-content" >  
@@ -392,11 +483,16 @@ return (
 																<Form.Check.Input 
 																	type='checkbox' 
 																	defaultChecked = {taskId_name.get(taskId).completed}
-																	onClick={(e) => handleSubmit("completeTask", e, taskId)}/>
+																	onClick={(e) => handleSubmit("completeTask", e, [taskId])}/>
 															</Col>
 															<Col>
-																<div inline onClick={() => {handleClick(taskId)}}>
+																<div onClick={() => {handleClick(taskId)}}>
 																	{taskId_name.get(taskId).name}
+																</div>
+															</Col>
+															<Col xs lg="2">
+																<div onClick={(e)=>{handleSubmit("deleteTask", e, [taskId, aColl._id])}}>
+																	<img src={trashPic} alt="" style={{width:'15px'}}/>
 																</div>
 															</Col>
 														</Row></Container> 
@@ -412,7 +508,7 @@ return (
 										onChange={(e) => setCurrInputFieldVal(e.target.value)} 
 									/>
 									<Button 
-										onClick={(e) => handleSubmit("newTask", e, aColl['_id'])}
+										onClick={(e) => handleSubmit("newTask", e, [aColl['_id']])}
 										variant="outline-secondary" 
 										id="button-addon2"> 
 											Add 
