@@ -20,7 +20,10 @@ var TaskSchema = new Schema({
         type: String,
         required: true,
     },
-    description: String,
+    description: {
+        type: String,
+        default: ""
+    },
     assignedUser: {
         // type: Schema.Types.ObjectId,
         type: String,
@@ -44,6 +47,14 @@ var TaskSchema = new Schema({
     completed:{
         type: Boolean,
         default: false
+    },
+    accumulation: {
+        type: Number,
+        default: 0
+    },
+    tag: {
+        type: String,
+        default: ""
     }
 })
 

@@ -5,14 +5,41 @@ import axios from "axios";
 
 import { Button, Col, Row, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { json } from "react-router-dom";
+var port = process.env.PORT || 8080;
 
 function TaskModal({onClose, task})  {
-    const [currentTask, setCurrentTast] = useState(null);
-    const [sessionDuration, setSessionDuration] = useState(25);
-    const [description, setDescription] = useState(null);
-    const [tag, setTag] = useState(null);
+    const [sessionDuration, setSessionDuration] = useState(task.duration);
+    const [description, setDescription] = useState(task.description);
+    const [tag, setTag] = useState(task.tag);
 
+    async function onSave() {
+        fetch("http://localhost:" + port + "/api/task/" + task._id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": localStorage.getItem("token")
+              },
+            body: JSON.stringify({
+                name: task.name,
+                duration: sessionDuration,
+                description: description,
+                tag: tag,
+                // Need to pass assigned Collection id to the backend, because if does not 
+                // explicitly update it, it will be assigned to the default value.
+                assignedCollection: task.assignedCollection
+            })
+        })
+        .then(response => {
+            return response.json();
+        })
+        .catch(error => {
+            console.log("ERROR")
+            console.log(error);
+        })
+
+        onClose();
+    }
 
     console.log(task);
     return (
@@ -22,7 +49,7 @@ function TaskModal({onClose, task})  {
                     &times;
                 </span>
                 <h1 className={styles.title}>{task.name}</h1>
-                <span className={styles.save_button} onClick={onClose} >
+                <span className={styles.save_button} onClick={() => {onSave()}} >
                     &#10004;
                 </span>
             </div>
