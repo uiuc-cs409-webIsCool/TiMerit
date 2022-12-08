@@ -18,6 +18,10 @@ var CollectionSchema = new Schema({
         default: [],
         ref: "tasks",
         dropDups: true,
+    },
+    assignedUser:{
+        type: String,
+        // required:true
     }
 })
 
