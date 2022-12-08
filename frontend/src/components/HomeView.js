@@ -79,6 +79,18 @@ function Home() {
 				if (data) {
 					recvData = data.data;
 					setAllCollection(recvData)
+					var found = false;
+
+					//if didn't find uncategorized collection, create one.
+					recvData.map(coll =>{
+						if(coll.name === "Uncategorized") 
+							found = true;
+					})
+
+					//create new collection named Uncategorized
+					if(!found){
+						handleSubmit("newCollection", null, ["Uncategorized"]);
+					}
 					console.log(recvData);
 					console.log(allCollection); 
 	
@@ -95,6 +107,7 @@ function Home() {
 		} else {
 			logout();
 		}
+
 		// get task from db for each collection
 		const loadTask = async ()=>{
 			console.log("===loadTask=== recvData len: "+recvData.length);
@@ -170,10 +183,12 @@ function Home() {
 		if(operation==="newCollection"){
 			if(e) e.preventDefault();
 
+			const collName = (input_id.length>0 && input_id[0]==="Uncategorized") ? "Uncategorized" : collectionName;
+
 			console.log("handleSubmit: newCollection");
 			axios.post(
 				"http://localhost:" + port + "/api/collection",
-				{ name: collectionName },
+				{ name: collName },
 				{ headers: { "Access-Control-Allow-Origin": "*" , "x-access-token": localStorage.getItem("token")}, } )
 			.then(function (response) {
 				console.log("===Collection create success==="+JSON.stringify(response.data.data)); 
@@ -405,7 +420,7 @@ return (
 	)}
 	<Row>
 {/* NAV BAR right */}
-		<Col xs={6} md={4} className="col-leftside-container">
+		<Col xs={6} md={3} className="col-leftside-container">
 			<Row className="to-center" id="row-leftside-container">
 				<div className="userPic-container">
 					<img src={userPic} id="userPic" alt=""></img>
@@ -428,11 +443,11 @@ return (
 		</Col>
 
 {/* MAIN CONTENT left   onSubmit={onFormSubmit}*/}
-		<Col xs={12} md={8}> <form className="login-card" >
+		<Col xs={12} md={9}> <form className="login-card" >
 			<div className="mainContent-div" style={{height:scrollPosition}}> <Container className="mainContent-container">
 {/* + sign to add new collection */}
-			<Row sm>  
-				<Card className="plus-addNewCollection" style={{ width: '40rem' }}>
+			<Row sm style={{'margin-bottom': '30px', 'margin-left':'1px', 'margin-top':'20px'}}>  
+				<Card className="plus-addNewCollection" style={{ width: '35rem' }}>
 					<Card.Body className="mainContent-plussign">  
 						<Form.Control style={{ width: '20rem' }} name="collectionName" type="text" placeholder="Enter Your New Collectipn Name"
 							onChange={(e) => setCollectionName(e.target.value)} />
@@ -445,18 +460,30 @@ return (
 			{ //Array.from({ length: 0 }) submitDone===true &&
 				allCollection.length>0 && allCollection.map((aColl) => (
 					<Col lg className="mainContent-card" ref={elementRef} >
-						<div className="box no-cursor">
-							<Card style={{ width: '14rem' }} > 
+						<div className="box">
+							<Card style={{ width: '20rem' }} > 
 								<Card.Title className="mainContent-card-title">
-									<Container> <Row style={{ width: '210px' }}>
-									<Col md={{ span: 8, offset: 1 }}>
-										<div> {aColl['name']} </div>
-									</Col>
-									<Col md={{ span: 1, offset: 1 }}>
-										<div onClick={(e)=>{handleSubmit("deleteCollection", e, [aColl._id])}}>
-											<img src={trashPic} alt="" style={{width:'15px'}}/>
-										</div>
-									</Col>
+									<Container> <Row style={{ width: '310px' }}>
+									{
+										aColl.name !== "Uncategorized" 
+										&& 
+											<Col md={{ span: 8, offset: 1 }}>
+												<div> {aColl['name']} </div>
+											</Col> 
+										|| 
+											<Col>
+												<div> {aColl['name']} </div>
+											</Col> 
+									}
+									{
+										aColl.name !== "Uncategorized" && 
+										<Col md={{ span: 1, offset: 1 }}>
+											<div onClick={(e)=>{handleSubmit("deleteCollection", e, [aColl._id])}}>
+												<img src={trashPic} alt="" style={{width:'15px'}}/>
+											</div>
+										</Col>
+									}
+									
 									</Row></Container>
 								</Card.Title> 
 								<ListGroup variant="flush" className="mainContent-taskList" >
