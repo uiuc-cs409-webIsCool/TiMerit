@@ -5,6 +5,7 @@ import Welcome from "./components/Welcome";
 import Signup from "./components/Signup";
 import Collection from "./components/CollectionView";
 import Home from "./components/HomeView";
+import Timer from "./components/TimerView"
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/" element={<Welcome />} />
                 {/* <Route path="/" element={<Welcome />} /> */} 
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/timer" element={<Timer />} />
             </Routes>
         </div>
     )
