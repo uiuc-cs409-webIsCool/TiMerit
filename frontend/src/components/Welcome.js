@@ -89,9 +89,9 @@ function Welcome() {
             <div className={styles.introduction}>
                 <div className={styles.text_intro}>
                     <div className={styles.intro_card}>
-                        <div class="card-body">
-                        <h1 class="intro-card-title">Timerit</h1>
-                        <p class="intro-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        <div className="card-body">
+                        <h1 className="intro-card-title">Timerit</h1>
+                        <p className="intro-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                         Sed lacus felis, fringilla vitae est non, vulputate imperdiet odio. 
                         Ut ultrices tristique nulla, a varius erat condimentum in. Etiam quis viverra elit.
                         </p>
