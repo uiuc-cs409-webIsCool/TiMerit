@@ -173,6 +173,7 @@ module.exports = (router) => {
                 message: "Status: Get Success",
                 data: foundTask
             });
+            console.log("! foundTask: "+JSON.stringify(foundTask))
         }
         else {
             let err = new Error('Status: Locate Task Failed. Given task ID not found');

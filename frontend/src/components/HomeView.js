@@ -6,6 +6,7 @@ import axios from "axios";
 import userPic from "./assets/defaultUser.png";
 import trashPic from "./assets/trash-can-icon.png";
 import TaskModal from "./TaskModal";
+import NavBar from "./NavBar";
 // import Draggable, {DraggableCore} from 'react-draggable'; 
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
@@ -455,27 +456,7 @@ return (
 	)}
 	<Row>
 {/* NAV BAR right */}
-		<Col xs={6} md={3} className="col-leftside-container">
-			<Row className="to-center" id="row-leftside-container">
-				<div className="userPic-container">
-					<img src={userPic} id="userPic" alt=""></img>
-				</div>
-			</Row>
-			
-			<Row className="to-center"> 
-				<div className="sideBar-container"> 
-					<Nav fill variant="pills" defaultActiveKey="/home" className="flex-column" id="sideBar">
-						<Nav.Item>
-							<Nav.Link href="/home">Home</Nav.Link>
-							{/* <Nav.Link>Home</Nav.Link> */}
-						</Nav.Item>
-						<Nav.Item>
-							<Nav.Link eventKey="link-1" onClick={() => {logout()}}>Logout</Nav.Link>
-						</Nav.Item> 
-					</Nav> 
-				</div>
-			</Row>
-		</Col>
+		<NavBar defaultPage={"/home"}/>
 
 {/* MAIN CONTENT left   onSubmit={onFormSubmit}*/}
 		<Col xs={12} md={9}> <form className="login-card" >

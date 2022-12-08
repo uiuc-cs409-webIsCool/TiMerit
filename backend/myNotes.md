@@ -25,8 +25,14 @@
 ## TODO
 - [x] default PLUS sign to add new collection
 - [x] display all exisitng collection
-- [ ] move TASK code inside of collection
-- [ ] comment out loadData() before push
+- [x] move TASK code inside of collection
+- [x] comment out loadData() before push
+- [ ] Time Analysis
+  - [x] page route
+  - [x] add filters - date, collection name, duration
+  - [ ] add graph display - pie chartf for all tasks total duration percentage in all colelctions
+    - [ ] iterate over collection. each collection - get totalDuration.
+    - [ ] calculate collection duration percentage
 
 
 

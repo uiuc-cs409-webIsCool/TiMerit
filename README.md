@@ -10,11 +10,11 @@
 
 ###  Task schema
 1. 'name' - string - REQUIRED
-2. 'tag' - objectID - the _id field of its tag - default to "" 
-3. 'duration' - number of minutes - default to 0 - unchangeable
-4. 'description' - string
-5. 'date' - Date of creation - default to today's date - unchangeable
-6. 'assignedCollection' - objectID - the _id field of its collection - default to "" - REQUIRED
+<!-- 2. 'tag' - objectID - the _id field of its tag - default to ""  -->
+2. 'duration' - number of minutes - default to 0 - unchangeable
+3. 'description' - string
+4. 'date' - Date of creation - default to today's date - unchangeable
+5. 'assignedCollection' - objectID - the _id field of its collection - default to "" - REQUIRED
 
 ---
 

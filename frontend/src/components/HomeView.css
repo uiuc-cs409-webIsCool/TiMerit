@@ -2,8 +2,10 @@ body{
     background-color: rgba(247,246,255,255);
 }
 .to-center{
-    margin: auto auto;
-    width: 50%;
+    /* margin: auto auto;
+    width: 50%; */
+    display: flex;
+    justify-content: center;
 }
 .plus-addNewCollection{
     border-width: 0;
@@ -59,8 +61,8 @@ body{
     height: 100vh;
 }
 #row-leftside-container{
-    width: 150px;
-    height: 150px;
+    /* width: 150px;
+    height: 150px; */
 }
 .sideBar-container{
     background-color: white;
@@ -69,8 +71,7 @@ body{
     border-radius: 10px;
     border-style: solid;
 
-    width: 200px;
-    height: 100px;
+    width: 250px;
     /* padding: 30px; */
     /* margin-top: 100px;
     margin-left: 20px;
@@ -118,7 +119,7 @@ body{
 
 .mainContent-container{
     margin: 10px auto;
-    padding: 10;
+    padding: 10px;
 }
 
 .mainContent-card{
