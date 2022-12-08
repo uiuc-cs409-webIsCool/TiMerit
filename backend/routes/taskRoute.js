@@ -68,6 +68,9 @@ module.exports = (router) => {
         const id=req.params.id;
         const name = req.body.name? (req.body.name): null;
         var nameParam; if(name) nameParam=(name); console.log(nameParam);
+
+        const completed = req.body.completed? (req.body.completed): null;
+        var completedParam; if(completed) completedParam=(completed); console.log(completedParam);
         
         // const tag = req.body.tag? (req.body.tag): null;
         // var tagParam; var oldTagId;
@@ -90,7 +93,8 @@ module.exports = (router) => {
                 name: nameParam,
                 // tag: tagParam,
                 description: descriptionParam,
-                assignedCollection: assignedCollectionParam
+                assignedCollection: assignedCollectionParam,
+                completed: completedParam
             }, 
             { new: true }
         ).catch(next);
@@ -142,18 +146,7 @@ module.exports = (router) => {
         console.log("! req.params: "+JSON.stringify(req.params));
         
         let id = req.params.id;
-        const foundTask=await taskModel.findOne({ '_id': id })
-            // .then(result =>{
-            //     console.log("! get task: "+foundTask);
-            //     if(result)
-            //     res.status(200).json({
-            //         message: "Status: Delete Success",
-            //         data: result
-            //     });
-            // }).catch((err)=>{
-            //     err.message = "404 Cannot locate task based on id: " + id;
-            //     next(err);
-            // });  
+        const foundTask=await taskModel.findOne({ '_id': id }) 
 
         if(foundTask) {
             res.status(200).json({
