@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import './TimerView.css'
+import axios from "axios";
 
-const Timer = () => {
+var port = process.env.PORT || 8080;
+
+const Timer = (props) => {
+
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  
 
   function toggle() {
     setIsActive(!isActive);
   }
 
   function stop() {
-    setTime(0);
+    //setTime(0);
     setIsActive(false);
+    axios.put(
+        "http://localhost:" + port + "/api/task/" + props.taskid,
+        { duration: time },
+        { headers: { "Access-Control-Allow-Origin": "*" }, } )
+    .then(response => {
+        console.log(response);
+    })
+    .catch(err => {
+        console.log(err);
+    });
+    window.location.href = "/home";
   }
 
   useEffect(() => {
