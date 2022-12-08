@@ -26,7 +26,7 @@ module.exports = (router) => {
             allTasks: req.body.allTasks,
             assignedUser: decoded.email
         });
-        
+
         console.log("! newCollection: "+collection); 
         collection.save().then(doc =>{
             res.status(201).json({
@@ -74,9 +74,10 @@ module.exports = (router) => {
     //////////////////////////////GET//////////////////////////////////
     collectionRoute.get(async (req, res) => {
         console.log(req.headers["x-access-token"])
+        const decoded = jwt.verify(req.headers['x-access-token'], "shhhhh");
         console.log('===in getCollection===');
 
-        const allCollection=await collectionModel.find();
+        const allCollection=await collectionModel.find({"assignedUser": decoded.email});
         console.log("! get all collection: "+allCollection);
 
         if(allCollection) {

@@ -59,23 +59,25 @@ function Home() {
 	 */
 
 	// TODO: Pass header in get request.
-	useEffect( () => {
+	useEffect(() => {
 		var recvData;
-		// get collection from db
-		const loadCollection = async ()=>{
-			await axios.get(
-				"http://localhost:" + port + "/api/collection",
-				{ headers: {"x-access-token": localStorage.getItem(token)} } )
-			.then(function (response) {
+		const token = localStorage.getItem("token");
+		if (token) {
+			fetch("http://localhost:" + port + "/api/collection", {
+				method: "GET",
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+					"x-access-token": token
+				  }
+				}
+			).then(response => {
+				return response.json();
+			})
+			.then(data => {
 				console.log("===Collection Get success===");
-	
-				if (response.data.data) {
-					recvData = response.data.data;
+				if (data) {
+					recvData = data.data;
 					setAllCollection(recvData)
-					// recvData.length>0 && recvData.map((coll)=>(
-					// 	setAllCollection(allCollection => [...allCollection, coll])
-					// ))
-	
 					console.log(recvData);
 					console.log(allCollection); 
 	
@@ -89,8 +91,9 @@ function Home() {
 				console.log("===Collection get FAILED==="); 
 				console.log(error); 
 			})
-		};
-	
+		} else {
+			logout();
+		}
 		// get task from db for each collection
 		const loadTask = async ()=>{
 			console.log("===loadTask=== recvData len: "+recvData.length);
@@ -124,22 +127,6 @@ function Home() {
 			console.log("===!!!!Task get FINISHED!!!!==="); 
 		};
 
-		// loadCollection()
-
-
-		const token = localStorage.getItem("token");
-		if (token) {
-			console.log(token);
-			const user = jwt_decode(token);
-			console.log(user);
-
-			if (!user) {
-				localStorage.removeItem('token')
-				navigate.replace('/')
-			} else {
-                loadCollection()
-			} 
-		}
 	}, [])
 
 	/** ================================================================================
