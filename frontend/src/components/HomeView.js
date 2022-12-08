@@ -452,7 +452,7 @@ return (
 		<Col xs={12} md={9}> <form className="login-card" >
 			<div className="mainContent-div" style={{height:scrollPosition}}> <Container className="mainContent-container">
 {/* + sign to add new collection */}
-			<Row sm style={{'margin-bottom': '30px', 'margin-left':'1px', 'margin-top':'20px'}}>  
+			<Row sm className="mainContent-row">  
 				<Card className="plus-addNewCollection" style={{ width: '35rem' }}>
 					<Card.Body className="mainContent-plussign">  
 						<Form.Control style={{ width: '20rem' }} name="collectionName" type="text" placeholder="Enter Your New Collectipn Name"

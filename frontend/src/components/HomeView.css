@@ -140,3 +140,8 @@ body{
 .mainContent-addNewTask-inputGroup{
     margin-top: 2px;
 } 
+.mainContent-row{
+    margin-bottom: 30px;
+    margin-left: 1px;
+    margin-top: 20px;
+}
