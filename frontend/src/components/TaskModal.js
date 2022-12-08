@@ -32,7 +32,7 @@ function TaskModal({onClose, task})  {
                     <Form.Group style={{"display": "flex"}}>
                         <Form.Label>Tag:</Form.Label>
                         <Form.Control
-                        value={tag}
+                        value={tag == null ? "" : tag}
                         onChange={(e) => {setTag(e.target.value)}}
                         className={styles.tag}
                         />
@@ -40,7 +40,7 @@ function TaskModal({onClose, task})  {
                     <Form.Group>
                         <Form.Label>Description:</Form.Label>
                         <Form.Control
-                        value={description}
+                        value={description == null ? "" : description}
                         onChange={(e) => {setDescription(e.target.value)}}
                         className={styles.description}
                         />
@@ -49,7 +49,7 @@ function TaskModal({onClose, task})  {
                     <Form.Group className={styles.session}>
                         <Form.Label>Session Duration:</Form.Label>
                         <Form.Control
-                        value={sessionDuration}
+                        value={sessionDuration== null ? "" : sessionDuration}
                         onChange={(e) => {setSessionDuration(e.target.value)}}
                         className={styles.duration}
                         />
