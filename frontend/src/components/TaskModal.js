@@ -7,7 +7,7 @@ import { Button, Col, Row, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
-function TaskModal({onClose, task})  {
+function TaskModal({onClose, task, update_name})  {
     const [currentTask, setCurrentTast] = useState(null);
     const [sessionDuration, setSessionDuration] = useState(25);
     const [description, setDescription] = useState(null);

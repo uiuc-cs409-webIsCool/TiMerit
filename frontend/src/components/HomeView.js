@@ -173,12 +173,19 @@ function Home() {
 	useEffect(() => { 
 		setTaskId_name(taskId_name.set(newTaskId, newTaskInfo));
 	}, [newTaskInfo]);
+
+	/** ================================================================================
+	 *  useEffect 
+	 *  Update local data after modal is closed
+	 *  ================================================================================
+	 */
 	const updateTaskName = (taskId, newTaskName) => {
 		var oldTaskInfo = taskId_name.get(taskId)
 		oldTaskInfo.name = newTaskName
 		setNewTaskId(taskId)
 		setNewTaskInfo(oldTaskInfo)
 	}
+
 
 	
 	/** ================================================================================
@@ -444,7 +451,7 @@ return (
 	<div className="outer-container-div">
 	<Container className="outer-container">
 	{showModal && (
-		<TaskModal onClose={handleClose} task={currentTask}/>
+		<TaskModal onClose={handleClose} task={currentTask} update_name={updateTaskName}/>
 	)}
 	<Row>
 {/* NAV BAR right */}
