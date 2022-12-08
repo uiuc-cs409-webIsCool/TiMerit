@@ -71,7 +71,10 @@ module.exports = (router) => {
 
         const completed = req.body.completed? (req.body.completed): null;
         var completedParam; if(completed) completedParam=(completed); console.log(completedParam);
-        
+
+        const duration = req.body.duration? (req.body.duration): null;
+        var durationParam; if(duration) durationParam=(duration); console.log(durationParam);
+
         // const tag = req.body.tag? (req.body.tag): null;
         // var tagParam; var oldTagId;
         // if(tag) {
@@ -94,7 +97,8 @@ module.exports = (router) => {
                 // tag: tagParam,
                 description: descriptionParam,
                 assignedCollection: assignedCollectionParam,
-                completed: completedParam
+                completed: completedParam,
+                duration: durationParam
             }, 
             { new: true }
         ).catch(next);
