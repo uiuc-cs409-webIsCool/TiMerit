@@ -173,6 +173,12 @@ function Home() {
 	useEffect(() => { 
 		setTaskId_name(taskId_name.set(newTaskId, newTaskInfo));
 	}, [newTaskInfo]);
+	const updateTaskName = (taskId, newTaskName) => {
+		var oldTaskInfo = taskId_name.get(taskId)
+		oldTaskInfo.name = newTaskName
+		setNewTaskId(taskId)
+		setNewTaskInfo(oldTaskInfo)
+	}
 
 	
 	/** ================================================================================
