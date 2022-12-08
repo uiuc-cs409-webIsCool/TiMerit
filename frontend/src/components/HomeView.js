@@ -57,13 +57,15 @@ function Home() {
 	 *  fetch data at boot up:
 	 *  ================================================================================
 	 */
+
+	// TODO: Pass header in get request.
 	useEffect( () => {
 		var recvData;
 		// get collection from db
 		const loadCollection = async ()=>{
 			await axios.get(
 				"http://localhost:" + port + "/api/collection",
-				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+				{ headers: {"x-access-token": localStorage.getItem(token)} } )
 			.then(function (response) {
 				console.log("===Collection Get success===");
 	
@@ -184,7 +186,7 @@ function Home() {
 			axios.post(
 				"http://localhost:" + port + "/api/collection",
 				{ name: collectionName },
-				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
+				{ headers: { "Access-Control-Allow-Origin": "*" , "x-access-token": localStorage.getItem("token")}, } )
 			.then(function (response) {
 				console.log("===Collection create success==="+JSON.stringify(response.data.data)); 
 				if (response.data.data._id) {
