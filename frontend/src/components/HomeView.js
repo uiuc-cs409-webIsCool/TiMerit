@@ -477,7 +477,7 @@ return (
 			<Row sm className="mainContent-row">  
 				<Card className="plus-addNewCollection" style={{ width: '35rem' }}>
 					<Card.Body className="mainContent-plussign">  
-						<Form.Control style={{ width: '20rem' }} name="collectionName" type="text" placeholder="Enter Your New Collectipn Name"
+						<Form.Control style={{ width: '20rem' }} name="collectionName" type="text" placeholder="Enter Your New Collection Name"
 							onChange={(e) => setCollectionName(e.target.value)} />
 						<Button className="mainContent-plussign" variant="primary" onClick={(e) => handleSubmit("newCollection", e, [0])}>+</Button>
 					</Card.Body>
