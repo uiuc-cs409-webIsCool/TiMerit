@@ -1,3 +1,5 @@
+var jwt = require("jsonwebtoken");
+
 var express = require('express'),
     router = express.Router(),
     collectionController = require('../controller/collectionController'),
@@ -16,10 +18,15 @@ module.exports = (router) => {
     collectionRoute.post(async(req, res, next)=>{
         console.log('===in postCollection===');
         console.log("req.body: "+JSON.stringify(req.body));
+        // Decode token with key shhhhh
+        const decoded = jwt.verify(req.headers['x-access-token'], "shhhhh");
+
         const collection = new collectionModel({
             name: req.body.name,
-            allTasks: req.body.allTasks
+            allTasks: req.body.allTasks,
+            assignedUser: decoded.email
         });
+
         console.log("! newCollection: "+collection); 
         collection.save().then(doc =>{
             res.status(201).json({
@@ -66,9 +73,11 @@ module.exports = (router) => {
 
     //////////////////////////////GET//////////////////////////////////
     collectionRoute.get(async (req, res) => {
+        console.log(req.headers["x-access-token"])
+        const decoded = jwt.verify(req.headers['x-access-token'], "shhhhh");
         console.log('===in getCollection===');
 
-        const allCollection=await collectionModel.find();
+        const allCollection=await collectionModel.find({"assignedUser": decoded.email});
         console.log("! get all collection: "+allCollection);
 
         if(allCollection) {
