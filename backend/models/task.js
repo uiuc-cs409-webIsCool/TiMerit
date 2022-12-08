@@ -48,10 +48,6 @@ var TaskSchema = new Schema({
         type: Boolean,
         default: false
     },
-    accumulation: {
-        type: Number,
-        default: 0
-    },
     tag: {
         type: String,
         default: ""
