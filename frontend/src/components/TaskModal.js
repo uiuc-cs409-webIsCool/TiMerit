@@ -14,7 +14,7 @@ var port = process.env.PORT || 8080;
 
 function TaskModal({onClose, task, update_name})  {
     const [name, setName] = useState(task.name);
-    const [sessionDuration, setSessionDuration] = useState(task.duration);
+    const [sessionDuration, setSessionDuration] = useState(0);
     const [description, setDescription] = useState(task.description);
     const [tag, setTag] = useState(task.tag);
     const [accumulatedTime, setAccumulatedTime] = useState(task.accumulatedTime);
