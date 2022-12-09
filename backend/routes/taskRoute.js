@@ -130,8 +130,9 @@ module.exports = (router) => {
             task.tag = req.body.tag;
             // Prevent default
             task.assignedCollection = req.body.assignedCollection;
+            task.accumulatedTime = req.body.accumulatedTime;
             
-            console.log(task)
+            // console.log(task)
             task.save((err, updatedTask) => {
                 if (err) {
                     console.log(err)
