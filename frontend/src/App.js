@@ -19,7 +19,7 @@ function App() {
                 <Route path="/" element={<Welcome />} />
                 <Route path="/analysis" element={<Analysis />} /> 
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/timer" element={<Timer />} />
+                {/* <Route path="/timer" element={<Timer />} /> */}
             </Routes>
         </div>
     )

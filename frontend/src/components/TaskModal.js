@@ -6,6 +6,10 @@ import axios from "axios";
 import { Button, Col, Row, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { json } from "react-router-dom";
+
+import Timer from "./TimerView.js"
+
+
 var port = process.env.PORT || 8080;
 
 function TaskModal({onClose, task, update_name})  {
@@ -13,6 +17,7 @@ function TaskModal({onClose, task, update_name})  {
     const [sessionDuration, setSessionDuration] = useState(task.duration);
     const [description, setDescription] = useState(task.description);
     const [tag, setTag] = useState(task.tag);
+    const [accumulatedTime, setAccumulatedTime] = useState(task.accumulatedTime);
 
     async function onSave() {
         fetch("http://localhost:" + port + "/api/task/" + task._id, {
@@ -43,7 +48,9 @@ function TaskModal({onClose, task, update_name})  {
         
     }
 
-    console.log(task);
+    function updateSession() {
+
+    }
     return (
         <div className={styles.modal}>
             <div className={styles.modal_header} style={{ textAlign: 'center' }}>
@@ -90,8 +97,12 @@ function TaskModal({onClose, task, update_name})  {
                 </Col>
 
                 <Col style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <p>You have focused {} minutes for this task.</p>
-                    <Button className={styles.start_focus}>Start</Button>
+                    <Row>
+                    <Timer duration={sessionDuration}></Timer>
+                    </Row>
+                    <Row>
+                    <p>You have focused for {accumulatedTime} minutes.</p>
+                    </Row>
                 </Col>
 
             </Row>

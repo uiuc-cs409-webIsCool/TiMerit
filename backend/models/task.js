@@ -51,6 +51,10 @@ var TaskSchema = new Schema({
     tag: {
         type: String,
         default: ""
+    },
+    accumulatedTime: {
+        type: Number,
+        default:0
     }
 })
 
