@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './TimerView.css';
+import axios from "axios";
 
 
-const Timer = ({ duration }) => {
-    console.log(duration)
+var port = process.env.PORT || 8080;
+
+const Timer = ({ duration,task }) => {
     const [timeLeft, setTimeLeft] = useState(duration * 60 * 1000);
     const [isRunning, setIsRunning] = useState(false);
     const [startTime, setStartTime] = useState(null);
+    const [accumulatedTime, setAccumulatedTime] = useState(0);
     /**
      * When a tab is inactive, its JavaScript execution is typically paused in order to 
      * conserve system resources. This means that the setInterval function in the code will not be called as often, 
@@ -45,7 +48,33 @@ const Timer = ({ duration }) => {
       }
     }, [timeLeft]);
 
-    
+    function stop() {
+      setIsRunning(false);
+      axios.get(
+        "http://localhost:" + port + "/api/task/" + task._id,
+        { headers: { "Access-Control-Allow-Origin": "*" }, })
+      .then(res => {
+        setAccumulatedTime(res.data.data.duration);
+      })
+
+      const timeOfThisSession = (duration - timeLeft / 60 / 1000 ) ;
+      const newAccumulatedtime = accumulatedTime + timeOfThisSession;
+      console.log(accumulatedTime)
+      console.log(timeOfThisSession)
+      console.log(newAccumulatedtime)
+
+      axios.put(
+        "http://localhost:" + port + "/api/task/" + task._id,
+        { duration: newAccumulatedtime},
+        { headers: { "Access-Control-Allow-Origin": "*" }, } )
+    .then(response => {
+        console.log(response);
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
+    }
   
     const seconds = Math.floor((timeLeft / 1000) % 60);
     const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
@@ -59,7 +88,7 @@ const Timer = ({ duration }) => {
           {seconds.toString().padStart(2, '0')}
         </p>
         {isRunning ? (
-          <button onClick={() => setIsRunning(false)}>Stop</button>
+          <button onClick={() => stop()}>Stop</button>
         ) : (
           <button onClick={() => setIsRunning(true)}>Start</button>
         )}
