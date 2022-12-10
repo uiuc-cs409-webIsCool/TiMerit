@@ -18,7 +18,6 @@ function TaskModal({onClose, task, update_name})  {
     const [description, setDescription] = useState(task.description);
     const [tag, setTag] = useState(task.tag);
 
-    console.log(task)
 
     async function onSave() {
         fetch("http://localhost:" + port + "/api/task/" + task._id, {
@@ -46,12 +45,12 @@ function TaskModal({onClose, task, update_name})  {
         })
         update_name(task._id, name);
         onClose();
-        
     }
 
     function updateSession() {
 
     }
+
     return (
         <div className={styles.modal}>
             <div className={styles.modal_header} style={{ textAlign: 'center' }}>
@@ -62,7 +61,7 @@ function TaskModal({onClose, task, update_name})  {
                 value={name == null ? "" : name}
                 onChange={(e) => {setName(e.target.value)}}
                 className={styles.title}/>
-                <span className={styles.save_button} onClick={() => {onSave()}} >
+                <span className={styles.save_button} onClick={() => {onSave(true)}} >
                     &#10004;
                 </span>
             </div>
@@ -99,10 +98,7 @@ function TaskModal({onClose, task, update_name})  {
 
                 <Col style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Row>
-                    <Timer duration={sessionDuration} task={task}></Timer>
-                    </Row>
-                    <Row>
-                    <p>You have focused for {task.accumulatedTime} minutes.</p>
+                    <Timer duration={sessionDuration} task={task} save_data={onSave}></Timer>
                     </Row>
                 </Col>
 
