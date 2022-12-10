@@ -5,7 +5,7 @@ import axios from "axios";
 
 var port = process.env.PORT || 8080;
 
-const Timer = ({ duration,task }) => {
+const Timer = ({ duration, task }) => {
     const [timeLeft, setTimeLeft] = useState(duration * 60 * 1000);
     const [isRunning, setIsRunning] = useState(false);
     const [startTime, setStartTime] = useState(null);
@@ -50,30 +50,20 @@ const Timer = ({ duration,task }) => {
 
     function stop() {
       setIsRunning(false);
-      axios.get(
-        "http://localhost:" + port + "/api/task/" + task._id,
-        { headers: { "Access-Control-Allow-Origin": "*" }, })
-      .then(res => {
-        setAccumulatedTime(res.data.data.duration);
-      })
-
-      const timeOfThisSession = (duration - timeLeft / 60 / 1000 ) ;
-      const newAccumulatedtime = accumulatedTime + timeOfThisSession;
-      console.log(accumulatedTime)
-      console.log(timeOfThisSession)
-      console.log(newAccumulatedtime)
-
+      // const focus_time = duration - Math.ceil((timeLeft / 1000 / 60))
+      const focus_time = 1;
+      
+      console.log(focus_time)
       axios.put(
         "http://localhost:" + port + "/api/task/" + task._id,
-        { duration: newAccumulatedtime},
-        { headers: { "Access-Control-Allow-Origin": "*" }, } )
-    .then(response => {
+        {accumulatedTime: task.accumulatedTime + focus_time}
+      )
+      .then(response => {
         console.log(response);
-    })
-    .catch(err => {
+      })
+      .catch(err => {
         console.log(err);
-    });
-
+      })
     }
   
     const seconds = Math.floor((timeLeft / 1000) % 60);

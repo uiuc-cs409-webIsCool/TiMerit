@@ -72,25 +72,31 @@ module.exports = (router) => {
         const completed = req.body.completed? (req.body.completed): null;
         var completedParam; if(completed) completedParam=(completed); console.log(completedParam);
 
+        const tag = req.body.tag? (req.body.tag): null;
+        var tagParam; if(tag) tagParam=(tag); console.log(tagParam);
+
         const duration = req.body.duration? (req.body.duration): null;
         var durationParam; if(duration) durationParam=(duration); console.log(durationParam);
 
         const description = req.body.description? (req.body.description): null;
-        var descriptionParam; if(description) descriptionParam=toId(description); console.log(descriptionParam);
+        var descriptionParam; if(description) descriptionParam=description; console.log(descriptionParam);
 
         const assignedCollection = req.body.assignedCollection? (req.body.assignedCollection): null;
         var assignedCollectionParam; if(assignedCollection) assignedCollectionParam=toId(assignedCollection); console.log(assignedCollectionParam);
 
+        const accumulatedTime = req.body.accumulatedTime? (req.body.accumulatedTime): null;
+        var accumulatedTimeParam; if (accumulatedTime) accumulatedTimeParam=(accumulatedTime); console.log(accumulatedTimeParam)
  
         const doc = await taskModel.findOneAndUpdate(
             { _id: id },
             { 
                 name: nameParam,
-                // tag: tagParam,
+                tag: tagParam,
                 description: descriptionParam,
                 assignedCollection: assignedCollectionParam,
                 completed: completedParam,
-                duration: durationParam
+                duration: durationParam,
+                accumulatedTime: accumulatedTimeParam
             }, 
             { new: true }
         ).catch(next);

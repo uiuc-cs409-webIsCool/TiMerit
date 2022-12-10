@@ -14,21 +14,22 @@ var port = process.env.PORT || 8080;
 
 function TaskModal({onClose, task, update_name})  {
     const [name, setName] = useState(task.name);
-    const [sessionDuration, setSessionDuration] = useState(null);
+    const [sessionDuration, setSessionDuration] = useState(task.duration);
     const [description, setDescription] = useState(task.description);
     const [tag, setTag] = useState(task.tag);
-    const [accumulatedTime, setAccumulatedTime] = useState(task.duration);
+
+    console.log(task)
 
     async function onSave() {
         fetch("http://localhost:" + port + "/api/task/" + task._id, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "x-access-token": localStorage.getItem("token")
               },
             body: JSON.stringify({
                 name: name,
-                duration: task.duration,
+                duration: sessionDuration,
                 description: description,
                 tag: tag,
                 // Need to pass assigned Collection id to the backend, because if does not 
@@ -101,7 +102,7 @@ function TaskModal({onClose, task, update_name})  {
                     <Timer duration={sessionDuration} task={task}></Timer>
                     </Row>
                     <Row>
-                    <p>You have focused for {accumulatedTime} minutes.</p>
+                    <p>You have focused for {task.accumulatedTime} minutes.</p>
                     </Row>
                 </Col>
 
