@@ -62,7 +62,7 @@ const Timer = ({ duration, task, save_data }) => {
       console.log(focus_time);
       // const focus_time = 1;
       axios.put(
-        "http://localhost:" + port + "/api/task/" + task._id,
+        "https://timerit.onrender.com/api/task/" + task._id,
         {accumulatedTime: accumulatedTime + focus_time}
       )
       .then(response => {

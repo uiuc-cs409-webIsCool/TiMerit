@@ -13,7 +13,7 @@ function Signup(event) {
     const [password, setPassword] = useState("");
 
     async function register() {
-        const res = await fetch("http://localhost:8080/api/signup", {
+        const res = await fetch("https://timerit.onrender.com/api/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

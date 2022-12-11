@@ -62,7 +62,7 @@ const TimeAnalysis = () => {
         var recvData;
 		const token = localStorage.getItem("token");
 		if (token) {
-			fetch("http://localhost:" + port + "/api/collection", {
+			fetch("https://timerit.onrender.com/api/collection", {
 				method: "GET",
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -106,7 +106,7 @@ const TimeAnalysis = () => {
 				for (const taskId of coll.allTasks){
 					try{
 						const response = await axios.get(
-							"http://localhost:" + port + "/api/task/"+taskId,
+							"https://timerit.onrender.com/api/task/"+taskId,
 							{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 
 						if(response){

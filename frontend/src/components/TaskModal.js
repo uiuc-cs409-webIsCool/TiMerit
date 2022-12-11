@@ -20,7 +20,7 @@ function TaskModal({onClose, task, update_name})  {
 
 
     async function onSave() {
-        fetch("http://localhost:" + port + "/api/task/" + task._id, {
+        fetch("https://timerit.onrender.com/api/task/" + task._id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
