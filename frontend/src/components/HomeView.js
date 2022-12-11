@@ -50,7 +50,8 @@ function Home() {
 		// Delete the token
 		localStorage.removeItem("token");
 		// Redirect to welcome page
-		window.location.href = "/";
+		// window.location.href = "/";
+		navigate("/");
 	}
 
 

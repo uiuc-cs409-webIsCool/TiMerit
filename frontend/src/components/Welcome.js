@@ -52,6 +52,7 @@ function Welcome() {
 
             // Redirect user to the home page
             // window.location.href = "/home";
+            // Use navigate to navigate, because window.location is not available after deployment.
             navigate("/home")
         } else {
             alert("Email or password is incorrect!");

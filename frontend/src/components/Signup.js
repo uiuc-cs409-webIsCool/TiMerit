@@ -1,6 +1,6 @@
 import { React, useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 import {Form, Row} from 'react-bootstrap'
 import styles from "./Signup.module.css";
@@ -11,6 +11,8 @@ function Signup(event) {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     async function register() {
         const res = await fetch("https://timerit.onrender.com/api/signup", {
@@ -30,7 +32,8 @@ function Signup(event) {
         const data = await res.json();
         console.log(data);
         if (data.data) {
-            window.location.href = "/";
+            // window.location.href = "/";
+            navigate("/");
         }
     }
 

@@ -20,11 +20,13 @@ const TimeAnalysis = () => {
      *  Helper functions on Nav Bar:
      *  ================================================================================
      */
+    const navigate = useNavigate();
     function logout() {
         // Delete the token
         localStorage.removeItem("token");
         // Redirect to welcome page
-        window.location.href = "/";
+        // window.location.href = "/";
+        navigate("/");
     }
 
     /** ================================================================================

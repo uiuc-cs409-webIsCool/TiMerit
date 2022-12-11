@@ -3,10 +3,11 @@ import { React, useState, useRef, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./HomeView.css";
 import userPic from "./assets/defaultUser.png";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = ({defaultPage}) => {
 
-
+	const navigate = useNavigate();
 
     /** ================================================================================
 	 *  Helper functions on Nav Bar:
@@ -16,7 +17,9 @@ const NavBar = ({defaultPage}) => {
 		// Delete the token
 		localStorage.removeItem("token");
 		// Redirect to welcome page
-		window.location.href = "/";
+		// window.location.href = "/";
+		navigate("/")
+		
 	}
 
 
