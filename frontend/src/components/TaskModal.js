@@ -24,7 +24,8 @@ function TaskModal({onClose, task, update_name})  {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "x-access-token": localStorage.getItem("token")
+                "x-access-token": localStorage.getItem("token"),
+                "Access-Control-Allow-Origin": "*"
               },
             body: JSON.stringify({
                 name: name,

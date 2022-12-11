@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 const corsOptions ={
-    origin:'https://timerit.onrender.com', 
+    origin:'https://timerit-app.onrender.com', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
