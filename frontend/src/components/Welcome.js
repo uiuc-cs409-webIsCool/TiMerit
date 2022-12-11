@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import styles from "./Welcome.module.css";
 import "bootstrap/dist/css/bootstrap.min.css"
 import {Form, Row, Col, Carousel} from 'react-bootstrap'
-
-import logo from "./assets/test.png"
-import carousel_image from "./assets/test1.jpg"
 import { Link } from "react-router-dom";
-
 import TaskModal from "./TaskModal";
+
+
+import logo from "./assets/logo.png"
+import carousel1 from "./assets/carousel1.png"
+import carousel2 from "./assets/carousel2.png"
+import carousel3 from "./assets/carousel3.png"
 
 
 
@@ -91,9 +93,9 @@ function Welcome() {
                     <div className={styles.intro_card}>
                         <div className="card-body">
                         <h1 className="intro-card-title">Timerit</h1>
-                        <p className="intro-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Sed lacus felis, fringilla vitae est non, vulputate imperdiet odio. 
-                        Ut ultrices tristique nulla, a varius erat condimentum in. Etiam quis viverra elit.
+                        <p className="intro-card-text">
+                        Are you tired of feeling overwhelmed and unproductive? Timerit is an innovative time management tool that helps you stay focused, 
+                        track the time you spend on tasks and achieve your goals. Try Timerit today and take back control of your time!
                         </p>
                     </div>
                 </div>
@@ -111,15 +113,15 @@ function Welcome() {
             <div className={styles.slide_images}>
                 <Carousel>
                     <Carousel.Item>
-                        <img className={styles.carousel_image} src={carousel_image} alt="first slide" />
+                        <img className={styles.carousel_image} src={carousel1} alt="first slide" />
                     </Carousel.Item>
 
                     <Carousel.Item>
-                        <img className={styles.carousel_image} src={carousel_image} alt="first slide" />
+                        <img className={styles.carousel_image} src={carousel2} alt="first slide" />
                     </Carousel.Item>
 
                     <Carousel.Item>
-                        <img className={styles.carousel_image} src={carousel_image} alt="first slide" />
+                        <img className={styles.carousel_image} src={carousel3} alt="first slide" />
                     </Carousel.Item>
 
                 </Carousel>
