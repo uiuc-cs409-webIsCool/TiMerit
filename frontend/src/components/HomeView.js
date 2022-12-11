@@ -64,6 +64,7 @@ function Home() {
 	useEffect(() => {
 		var recvData;
 		const token = localStorage.getItem("token");
+		console.log("Get 1");
 		if (token) {
 			fetch("https://timerit.onrender.com/api/collection", {
 				method: "GET",
@@ -108,7 +109,7 @@ function Home() {
 		} else {
 			logout();
 		}
-
+		console.log("Get 2");
 		// get task from db for each collection
 		const loadTask = async ()=>{
 			console.log("===loadTask=== recvData len: "+recvData.length);
@@ -141,7 +142,7 @@ function Home() {
 			setSuccess(true)
 			console.log("===!!!!Task get FINISHED!!!!==="); 
 		};
-
+		console.log("Finish gets");
 	}, [])
 
 	/** ================================================================================
