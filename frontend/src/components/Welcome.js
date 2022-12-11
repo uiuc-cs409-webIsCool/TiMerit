@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useNavigate} from "react-router-dom"
 
 import styles from "./Welcome.module.css";
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -18,7 +19,7 @@ function Welcome() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showModal, setShowModal] = useState(false);
-
+    const navigate = useNavigate();
     /**
      * In frontend, create states to store value of input email and input password.
      * Send a post request with email and password. Backend will return a boolean variable
@@ -50,7 +51,8 @@ function Welcome() {
             localStorage.setItem("token", data.user);
 
             // Redirect user to the home page
-            window.location.href = "/home";
+            // window.location.href = "/home";
+            navigate("/home")
         } else {
             alert("Email or password is incorrect!");
             console.log("User name or password is incorrect.")
