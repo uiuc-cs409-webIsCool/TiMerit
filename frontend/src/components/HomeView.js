@@ -65,7 +65,7 @@ function Home() {
 		var recvData;
 		const token = localStorage.getItem("token");
 		if (token) {
-			fetch("http://localhost:" + port + "/api/collection", {
+			fetch("https://timerit.onrender.com/api/collection", {
 				method: "GET",
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -116,7 +116,7 @@ function Home() {
 				for (const taskId of coll.allTasks){
 					try{
 						const response = await axios.get(
-							"http://localhost:" + port + "/api/task/"+taskId,
+							"https://timerit.onrender.com/api/task/"+taskId,
 							{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 
 						if(response){
@@ -201,7 +201,7 @@ function Home() {
 
 			console.log("handleSubmit: newCollection");
 			axios.post(
-				"http://localhost:" + port + "/api/collection",
+				"https://timerit.onrender.com/api/collection",
 				{ name: collName },
 				{ headers: { "Access-Control-Allow-Origin": "*" , "x-access-token": localStorage.getItem("token")}, } )
 			.then(function (response) {
@@ -225,7 +225,7 @@ function Home() {
 			console.log("handleSubmit: completeTask. before: "+before+". after: "+after);
 			//1 change data in db
 			axios.put(
-				"http://localhost:" + port + "/api/task/"+completedTaskId,
+				"https://timerit.onrender.com/api/task/"+completedTaskId,
 				{ completed: after.toString() },
 				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 			.then(function (response) {
@@ -246,7 +246,7 @@ function Home() {
 
 			//1 change data in db
 			axios.put(
-				"http://localhost:" + port + "/api/collection/"+toUpdateCollId,
+				"https://timerit.onrender.com/api/collection/"+toUpdateCollId,
 				{ name: toUpdateCollName },
 				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 			.then(function (response) {
@@ -277,7 +277,7 @@ function Home() {
 			console.log("handleSubmit: newTask. taskName: "+taskName+". taskUser: "+taskUser+". assignedCollectionId: "+assignedCollectionId );
 			//1 change data in db
 			await axios.post(
-				"http://localhost:" + port + "/api/task",
+				"https://timerit.onrender.com/api/task",
 				{ 
 					name: taskName,
 					assignedUser: taskUser,
@@ -301,7 +301,7 @@ function Home() {
 
 				//3 insert new task to collection local data
 				await axios.get(
-					"http://localhost:" + port + "/api/collection/"+assignedCollectionId,
+					"https://timerit.onrender.com/api/collection/"+assignedCollectionId,
 					{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 					.then(function (response) {
 			
@@ -343,7 +343,7 @@ function Home() {
 
 			//1 change data in db
 			await axios.delete(
-				"http://localhost:" + port + "/api/task/"+toDeleteTaskID,
+				"https://timerit.onrender.com/api/task/"+toDeleteTaskID,
 				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 			.then(async function (response) {
 				console.log("===Task delete success==="+JSON.stringify(response.data.data));
@@ -353,7 +353,7 @@ function Home() {
 
 				//3 insert new task to collection local data
 				await axios.get(
-					"http://localhost:" + port + "/api/collection/"+toDeleteTaskID_collId,
+					"https://timerit.onrender.com/api/collection/"+toDeleteTaskID_collId,
 					{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 					.then(function (response) {
 			
@@ -394,7 +394,7 @@ function Home() {
 
 			//1 change data in db
 			await axios.delete(
-				"http://localhost:" + port + "/api/collection/"+toDeleteCollID,
+				"https://timerit.onrender.com/api/collection/"+toDeleteCollID,
 				{ headers: { "Access-Control-Allow-Origin": "*" }, } )
 			.then(async function (response) {
 				console.log("===deleteCollection success==="+JSON.stringify(response.data.data));
@@ -427,7 +427,7 @@ function Home() {
 	// right within the function, it's not updated yet. Thus, it's null.
 	function handleClick(task) {
 		console.log("===in handleClick===")
-		axios.get(`http://localhost:8080/api/task/${task}`,{ headers: { "Access-Control-Allow-Origin": "*" }, })
+		axios.get(`https://timerit.onrender.com/api/task/${task}`,{ headers: { "Access-Control-Allow-Origin": "*" }, })
 		.then(function(response) {
 			setCurrentTask(response.data.data);
 			console.log("===get task modal info success!==="+JSON.stringify(response.data.data))

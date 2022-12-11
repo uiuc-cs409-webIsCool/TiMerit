@@ -26,7 +26,7 @@ function Welcome() {
      */
     async function login() {
         // button's type has been set as button to prevent submiting the form.
-        const res = await fetch("http://localhost:8080/api/login", {
+        const res = await fetch("https://timerit.onrender.com/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
