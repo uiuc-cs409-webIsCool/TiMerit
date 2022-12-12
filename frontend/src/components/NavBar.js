@@ -39,7 +39,7 @@ const NavBar = ({defaultPage}) => {
 							<Nav.Link href="/home">Home</Nav.Link> 
 						</Nav.Item>
 						<Nav.Item>
-							<Nav.Link href="/analysis">Time Analysis</Nav.Link> 
+							<Nav.Link onClick={() => {navigate("/analysis")}}>Time Analysis</Nav.Link> 
 						</Nav.Item> 
 						<Nav.Item>
 							<Nav.Link> </Nav.Link> 
