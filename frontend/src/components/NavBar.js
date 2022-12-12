@@ -1,5 +1,4 @@
 import { Button, Card, Nav, Col, Row, Container, ListGroup, Form, InputGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { React, useState, useRef, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./HomeView.css";
@@ -37,16 +36,16 @@ const NavBar = ({defaultPage}) => {
 				<div className="sideBar-container"> 
 					<Nav fill variant="pills" defaultActiveKey={defaultPage} className="flex-column" id="sideBar">
 						<Nav.Item>
-							<Link href="/home">Home</Link> 
+							<Nav.Link href="/home">Home</Nav.Link> 
 						</Nav.Item>
 						<Nav.Item>
-							<Link href="/analysis">Time Analysis</Link> 
+							<Nav.Link href="/analysis">Time Analysis</Nav.Link> 
 						</Nav.Item> 
 						<Nav.Item>
 							<Nav.Link> </Nav.Link> 
 						</Nav.Item> 
 						<Nav.Item>
-							<Link eventKey="link-1" onClick={() => {logout()}}>Logout</Link>
+							<Nav.Link eventKey="link-1" onClick={() => {logout()}}>Logout</Nav.Link>
 						</Nav.Item> 
 					</Nav> 
 				</div>
