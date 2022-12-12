@@ -222,7 +222,7 @@ const TimeAnalysis = () => {
     }
     return (
         <div className="outer-container-div"> 	<Container className="outer-container"> <Row>
-            <NavBar defaultPage={"/analysis"}/>
+            <NavBar/>
             <Col xs={12} md={9}> <form className="login-card" > <div className="mainContent-div" style={{height:scrollPosition}}> 
             <Container className="mainContent-container timeAnalysis-container h-100">
                 <Row className="h-40">

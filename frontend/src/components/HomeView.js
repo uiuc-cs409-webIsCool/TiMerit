@@ -463,10 +463,10 @@ return (
 		<TaskModal onClose={handleClose} task={currentTask} update_name={updateTaskName}/>
 	)}
 	<Row>
-{/* NAV BAR right */}
-		<NavBar defaultPage={"/home"}/>
+{/* NAV BAR left */}
+		<NavBar/>
 
-{/* MAIN CONTENT left   onSubmit={onFormSubmit}*/}
+{/* MAIN CONTENT right   onSubmit={onFormSubmit}*/}
 		<Col xs={12} md={9}> <form className="login-card" >
 			<div className="mainContent-div" style={{height:scrollPosition}}> <Container className="mainContent-container">
 {/* + sign to add new collection */}

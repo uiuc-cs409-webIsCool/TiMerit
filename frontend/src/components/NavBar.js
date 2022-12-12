@@ -5,7 +5,7 @@ import "./HomeView.css";
 import userPic from "./assets/defaultUser.png";
 import { useNavigate } from "react-router-dom";
 
-const NavBar = ({defaultPage}) => {
+const NavBar = () => {
 
 	const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const NavBar = ({defaultPage}) => {
 		localStorage.removeItem("token");
 		// Redirect to welcome page
 		// window.location.href = "/";
-		navigate("/")
+		navigate("/");
 		
 	}
 
@@ -34,7 +34,7 @@ const NavBar = ({defaultPage}) => {
 			
 			<Row className="to-center"> 
 				<div className="sideBar-container"> 
-					<Nav fill variant="pills" defaultActiveKey={defaultPage} className="flex-column" id="sideBar">
+					<Nav fill variant="pills" className="flex-column" id="sideBar">
 						<Nav.Item>
 							<Nav.Link onClick={() => {navigate("/home")}}>Home</Nav.Link> 
 						</Nav.Item>
