@@ -110,7 +110,6 @@ function Home() {
 		} else {
 			logout();
 		}
-		console.log("Get 2");
 		// get task from db for each collection
 		const loadTask = async ()=>{
 			console.log("===loadTask=== recvData len: "+recvData.length);
