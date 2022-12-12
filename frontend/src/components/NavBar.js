@@ -36,7 +36,7 @@ const NavBar = ({defaultPage}) => {
 				<div className="sideBar-container"> 
 					<Nav fill variant="pills" defaultActiveKey={defaultPage} className="flex-column" id="sideBar">
 						<Nav.Item>
-							<Nav.Link href="/home">Home</Nav.Link> 
+							<Nav.Link onClick={() => {navigate("/home")}}>Home</Nav.Link> 
 						</Nav.Item>
 						<Nav.Item>
 							<Nav.Link onClick={() => {navigate("/analysis")}}>Time Analysis</Nav.Link> 
